@@ -18,6 +18,10 @@
                         <th>Kategori</th>
                         <th>Harga</th>
                         <th>Stok</th>
+                        <th>
+                            SEO
+                        </th>
+
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -28,6 +32,8 @@
                             <a href="#">{{$v->name}}</a>
                             <br>
                             <small>{{str_limit($v->description, 100)}}</small>
+                            <br>
+                            <strong>Tags:</strong> {{strlen($v->tags) > 0 ? $v->tags : '-'}}
                         </td>
                         <td>
                             @foreach($v->category as $key => $value)
@@ -46,7 +52,30 @@
                             @endphp
                             {{$stok}}
                         </td>
-                        <td>{{$v->id}}</td>
+                        <td>
+                            <strong>Page Title:</strong> {{strlen($v->page_title) > 0 ? $v->page_title : '-'}}
+                            <br>
+                            <strong>Meta Description:</strong> {{strlen($v->meta_description) > 0 ? $v->meta_description : '-'}}
+                            <br>
+                            <strong>Meta Keywords:</strong> {{strlen($v->meta_keywords) > 0 ? $v->meta_meta_keywords : '-'}}
+                            <br>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i class="fa fa-bars"></i>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="#">Edit</a></li>
+                                    <li><a href="#">Detail</a></li>
+                                    <li><a href="#">Add Varian</a></li>
+                                    <li @if($v->published != 1) class="disabled" @endif><a href="#">Publish</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                 @endforelse
