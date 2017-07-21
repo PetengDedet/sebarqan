@@ -9,6 +9,8 @@ use Auth;
 use Hash;
 
 use App\User;
+use App\Product;
+use App\ProductVariant;
 
 class HomeController extends Controller
 {
@@ -29,8 +31,38 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
-        //return view('home');
+        //Recommended Product Slider
+        //Personalized
+        $recommended = Product::where('published', 1)
+            //->where('recommended', 1)
+            ->orderBy('updated_at', 'DESC')
+            ->take(config('admin.recommended_product_num'))
+            ->get();
+
+        //Hot Deals Slider
+        $hot_deal = Product::where('published', 1)
+            ->where('hot_deal', 1)
+            ->orderBy('updated_at', 'DESC')
+            ->take(config('admin.hot_deal_num'))
+            ->get();
+
+        $under_price = ProductVariant::with(['product' => function($q){
+                $q->where('published', 1);
+            }])
+            ->where('price', '<', config('admin.under_price.limit'))
+            ->orderBy('updated_at', 'DESC')
+            ->distinct('product_id')
+            ->take(config('admin.under_price.num'))
+            ->get();
+
+        //Product Baru
+        $product_baru = Product::where('published', 1)
+            ->where('new', 1)
+            ->orderBy('updated_at', 'DESC')
+            ->take(config('admin.new_product_num'))
+            ->get();
+
+        return view('home', compact('recommended', 'hot_deal', 'under_price', 'product_baru'));
     }
 
     public function login(Request $request) {

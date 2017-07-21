@@ -11,6 +11,9 @@
             @if(Session::has('msg'))
                 {!! Session::get('msg') !!}
             @endif
+            <a href="{{url('admin/new-product')}}" class="btn btn-primary btn-flat">Tambah Produk <i class="fa fa-plus"></i></a>
+                <br>
+                <br>
             <table class="table table-condensed table-stripped table-hover" id="table">
                 <thead>
                     <tr>
@@ -68,9 +71,11 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                     <li><a href="#">Edit</a></li>
-                                    <li><a href="#">Detail</a></li>
+                                    <li><a href="{{url('admin/product/detail/' . $v->id)}}">Detail</a></li>
                                     <li><a href="#">Add Varian</a></li>
-                                    <li @if($v->published != 1) class="disabled" @endif><a href="#">Publish</a></li>
+                                    @if($v->published != 1)
+                                        <li><a href="#">Publish</a></li>
+                                    @endif
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#">Delete</a></li>
                                 </ul>
@@ -81,6 +86,9 @@
                 @endforelse
                 </tbody>
             </table>
+
+                <br>
+            <a href="{{url('admin/new-product')}}" class="btn btn-primary btn-flat">Tambah Produk <i class="fa fa-plus"></i></a>
         </div>
     </div>
 @endsection

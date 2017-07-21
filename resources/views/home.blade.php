@@ -37,7 +37,7 @@
                 <div class="navtab">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs text-uppercase" role="tablist">
-                        <li role="presentation" class="active"><a href="#recomended" role="tab" data-toggle="tab">Recomended</a></li>
+                        <li role="presentation" class="active"><a href="#recomended" role="tab" data-toggle="tab">Recommended</a></li>
 
                         <li role="presentation"><a href="#hot-deals" role="tab" data-toggle="tab">Hot Deals</a></li>
 
@@ -51,139 +51,226 @@
                         <div role="tabpanel" class="tab-pane active" id="recomended">
                             <div class="section-product-list">
                                 <div class="row-del recomended-slide">
-                                    <div class="col-xs-3-del">
-                                        <a href="#" class="product-item">
+                                    @forelse($recommended as $k => $v)
+                                        <div class="col-xs-3-del">
+                                            <a href="{{url($v->slug)}}" class="product-item">
+                                                @if($v->featured == 1)
+                                                    <div class="featured text-center">
+                                                        <div class="inner">
+                                                            <span class="block">Pilihan</span>
+                                                            <span class="block">Editor</span>
+                                                        </div>
+                                                    </div> <!-- /.featured label -->
+                                                @endif
+
+                                            <div class="images">
+                                                <img src="{{$v->primePhoto}}" alt="Alt" />
+                                            </div> <!-- /.images -->
+
+                                            <div class="meta">
+                                                {{--<div class="countdown">--}}
+                                                    {{--<div class="hours">--}}
+                                                        {{--00--}}
+                                                    {{--</div> <!-- /.hours -->--}}
+
+                                                    {{--<div class="minute">--}}
+                                                        {{--00--}}
+                                                    {{--</div> <!-- /.minutes -->--}}
+
+                                                    {{--<div class="second">--}}
+                                                        {{--00--}}
+                                                    {{--</div> <!-- /.second -->--}}
+                                                {{--</div> <!-- /.countdown -->--}}
+
+                                                <div class="category">
+                                                    {{title_case($v->brand)}}
+                                                </div> <!-- /.category -->
+
+                                                <h2 class="name">
+                                                    {{title_case($v->name)}}
+                                                </h2> <!-- /.name -->
+
+                                                <div class="rating">
+                                                    @for($i = 1; $i<=5;$i++)
+                                                        @if($v->rate >= $i)
+                                                            <i class="ion-android-star"></i>
+                                                        @else
+                                                            <i class="ion-android-star-outline"></i>
+                                                        @endif
+                                                    @endfor
+
+                                                    <span class="count">{{$v->rating->count()}}</span>
+                                                </div> <!-- /.rating -->
+
+                                                <div class="price">
+                                                    @if($v->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->variant->first()->sale_price_end)))
+                                                        <div class="discount">
+                                                            {{number_format($v->variant->first()->discount, 0, '.', '.')}}%
+                                                        </div> <!-- /.discount -->
+                                                    @endif
+
+                                                    <div class="nominal">
+                                                        {{--//DISCOUNT--}}
+                                                        @if($v->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->variant->first()->sale_price_end)))
+                                                            <div class="nominal-discount">
+                                                                Rp {{number_format($v->variant->first()->sale_price, 0, ',', '.')}}
+                                                            </div>
+                                                        @endif
+
+                                                        <div class="nominal-normal">
+                                                             Rp {{number_format($v->variant->first()->price, 0, ',', '.')}}
+                                                        </div>
+                                                    </div> <!-- /.nominal -->
+                                                </div> <!-- /.price -->
+                                            </div> <!-- /.meta -->
+                                        </a> <!-- /.product item -->
+                                        </div> <!-- /.col-xs-3 -->
+
+                                        @empty
+                                            <em>Belum ada product recomended</em>
+                                    @endforelse
+                                </div> <!-- /.row -->
+                            </div> <!-- /.section product list -->
+                        </div> <!-- /.recomended -->
+
+
+                        <div role="tabpanel" class="tab-pane" id="hot-deals">
+                            @forelse($hot_deal as $k => $v)
+                                <div class="col-xs-3-del">
+                                    <a href="{{url($v->slug)}}" class="product-item">
+                                        @if($v->featured == 1)
                                             <div class="featured text-center">
                                                 <div class="inner">
                                                     <span class="block">Pilihan</span>
                                                     <span class="block">Editor</span>
                                                 </div>
                                             </div> <!-- /.featured label -->
+                                        @endif
 
-                                            <div class="images">
-                                                <img src="assets/images/bagian-produk-recomended/recomended-produk-1.png" alt="Alt" />
-                                            </div> <!-- /.images -->
+                                        <div class="images">
+                                            <img src="{{$v->primePhoto}}" alt="{{$v->slug}}" />
+                                        </div> <!-- /.images -->
 
-                                            <div class="meta">
-                                                <div class="countdown">
-                                                    <div class="hours">
-                                                        00
-                                                    </div> <!-- /.hours -->
+                                        <div class="meta">
+                                            {{--<div class="countdown">--}}
+                                            {{--<div class="hours">--}}
+                                            {{--00--}}
+                                            {{--</div> <!-- /.hours -->--}}
 
-                                                    <div class="minute">
-                                                        00
-                                                    </div> <!-- /.minutes -->
+                                            {{--<div class="minute">--}}
+                                            {{--00--}}
+                                            {{--</div> <!-- /.minutes -->--}}
 
-                                                    <div class="second">
-                                                        00
-                                                    </div> <!-- /.second -->
-                                                </div> <!-- /.countdown -->
+                                            {{--<div class="second">--}}
+                                            {{--00--}}
+                                            {{--</div> <!-- /.second -->--}}
+                                            {{--</div> <!-- /.countdown -->--}}
 
-                                                <div class="category">
-                                                    Cream Pot
-                                                </div> <!-- /.category -->
+                                            <div class="category">
+                                                {{title_case($v->brand)}}
+                                            </div> <!-- /.category -->
 
-                                                <h2 class="name">
-                                                    Cream Pot Musron Jar 30GR
-                                                </h2> <!-- /.name -->
+                                            <h2 class="name">
+                                                {{title_case($v->name)}}
+                                            </h2> <!-- /.name -->
 
-                                                <div class="rating">
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
+                                            <div class="rating">
+                                                @for($i = 1; $i<=5;$i++)
+                                                    @if($v->rate >= $i)
+                                                        <i class="ion-android-star"></i>
+                                                    @else
+                                                        <i class="ion-android-star-outline"></i>
+                                                    @endif
+                                                @endfor
 
-                                                    <span class="count">33</span>
-                                                </div> <!-- /.rating -->
+                                                <span class="count">{{$v->rating->count()}}</span>
+                                            </div> <!-- /.rating -->
 
-                                                <div class="price">
+                                            <div class="price">
+                                                @if($v->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->variant->first()->sale_price_end)))
                                                     <div class="discount">
-                                                        10%
+                                                        {{number_format($v->variant->first()->discount, 0, '.', '.')}}%
                                                     </div> <!-- /.discount -->
+                                                @endif
 
-                                                    <div class="nominal">
+                                                <div class="nominal">
+                                                    {{--//DISCOUNT--}}
+                                                    @if($v->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->variant->first()->sale_price_end)))
                                                         <div class="nominal-discount">
-                                                            Rp 4.500.00
+                                                            Rp {{number_format($v->variant->first()->sale_price, 0, ',', '.')}}
                                                         </div>
+                                                    @endif
 
-                                                        <div class="nominal-normal">
-                                                            Rp 4.050
-                                                        </div>
-                                                    </div> <!-- /.nominal -->
-                                                </div> <!-- /.price -->
-                                            </div> <!-- /.meta -->
-                                        </a> <!-- /.product item -->
-                                    </div> <!-- /.col-xs-3 -->
+                                                    <div class="nominal-normal">
+                                                        Rp {{number_format($v->variant->first()->price, 0, ',', '.')}}
+                                                    </div>
+                                                </div> <!-- /.nominal -->
+                                            </div> <!-- /.price -->
+                                        </div> <!-- /.meta -->
+                                    </a> <!-- /.product item -->
+                                </div> <!-- /.col-xs-3 -->
 
+                            @empty
+                                <em>Belum ada Hot Deal</em>
+                            @endforelse
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="under">
+                            <div class="section-product-list">
+
+                                @forelse($under_price as $k => $v)
                                     <div class="col-xs-3-del">
-                                        <a href="#" class="product-item">
+                                        <a href="{{url($v->product->slug)}}" class="product-item">
+                                            @if($v->product->featured == 1)
+                                                <div class="featured text-center">
+                                                    <div class="inner">
+                                                        <span class="block">Pilihan</span>
+                                                        <span class="block">Editor</span>
+                                                    </div>
+                                                </div> <!-- /.featured label -->
+                                            @endif
+
                                             <div class="images">
-                                                <img src="assets/images/bagian-produk-recomended/recomended-produk-2.png" alt="Alt" />
-                                            </div> <!-- /.images -->
-
-                                            <div class="meta">
-                                                <div class="countdown">
-                                                </div> <!-- /.countdown -->
-
-                                                <div class="category">
-                                                    Sponge Blender
-                                                </div> <!-- /.category -->
-
-                                                <h2 class="name">
-                                                    Sponge Blender Foundation Model Guci
-                                                </h2> <!-- /.name -->
-
-                                                <div class="rating">
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-
-                                                    <span class="count">33</span>
-                                                </div> <!-- /.rating -->
-
-                                                <div class="price">
-                                                    <div class="nominal">
-                                                        <div class="nominal-normal">
-                                                            Rp 14.990
-                                                        </div>
-                                                    </div> <!-- /.nominal -->
-                                                </div> <!-- /.price -->
-                                            </div> <!-- /.meta -->
-                                        </a> <!-- /.product item -->
-                                    </div> <!-- /.col-xs-3 -->
-
-                                    <div class="col-xs-3-del">
-                                        <a href="#" class="product-item">
-                                            <div class="images">
-                                                <img src="assets/images/bagian-produk-recomended/recomended-produk-3.png" alt="Alt" />
+                                                <img src="{{$v->product->primePhoto}}" alt="Alt" />
                                             </div> <!-- /.images -->
 
                                             <div class="meta">
                                                 <div class="category">
-                                                    Lanbis
+                                                    {{title_case($v->product->brand)}}
                                                 </div> <!-- /.category -->
 
                                                 <h2 class="name">
-                                                    Ultimate Flash Hugging
+                                                    {{title_case($v->product->name)}}
                                                 </h2> <!-- /.name -->
 
                                                 <div class="rating">
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
+                                                    @for($i = 1; $i<=5;$i++)
+                                                        @if($v->product->rate >= $i)
+                                                            <i class="ion-android-star"></i>
+                                                        @else
+                                                            <i class="ion-android-star-outline"></i>
+                                                        @endif
+                                                    @endfor
 
-                                                    <span class="count">10</span>
+                                                    <span class="count">{{$v->product->rating->count()}}</span>
                                                 </div> <!-- /.rating -->
 
                                                 <div class="price">
+                                                    @if($v->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->sale_price_start), \Carbon\Carbon::parse($v->sale_price_end)))
+                                                        <div class="discount">
+                                                            {{number_format($v->discount, 0, '.', '.')}}%
+                                                        </div> <!-- /.discount -->
+                                                    @endif
+
                                                     <div class="nominal">
+                                                        //DISCOUNT
+                                                        @if($v->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->sale_price_start), \Carbon\Carbon::parse($v->sale_price_end)))
+                                                            <div class="nominal-discount">
+                                                                Rp {{number_format($v->sale_price, 0, ',', '.')}}
+                                                            </div>
+                                                        @endif
+
                                                         <div class="nominal-normal">
-                                                            Rp 25.900
+                                                            Rp {{number_format($v->price, 0, ',', '.')}}
                                                         </div>
                                                     </div> <!-- /.nominal -->
                                                 </div> <!-- /.price -->
@@ -191,102 +278,11 @@
                                         </a> <!-- /.product item -->
                                     </div> <!-- /.col-xs-3 -->
 
-                                    <div class="col-xs-3-del">
-                                        <a href="#" class="product-item">
-                                            <div class="images">
-                                                <img src="assets/images/bagian-produk-recomended/recomended-produk-4.png" alt="Alt" />
-
-                                                <div class="outstock">OPPS! Kehabisan Stock</div> <!-- /.out stock -->
-                                            </div> <!-- /.images -->
-
-                                            <div class="meta">
-                                                <div class="category">
-                                                    Brush Egg
-                                                </div> <!-- /.category -->
-
-                                                <h2 class="name">
-                                                    Brush Cleanser / Pembersih Kuas Make Up
-                                                </h2> <!-- /.name -->
-
-                                                <div class="rating">
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-
-                                                    <span class="count">33</span>
-                                                </div> <!-- /.rating -->
-
-                                                <div class="price">
-                                                    <div class="discount">
-                                                        60%
-                                                    </div> <!-- /.discount -->
-
-                                                    <div class="nominal">
-                                                        <div class="nominal-discount">
-                                                            Rp 14.900.00
-                                                        </div>
-
-                                                        <div class="nominal-normal">
-                                                            Rp 5.960
-                                                        </div>
-                                                    </div> <!-- /.nominal -->
-                                                </div> <!-- /.price -->
-                                            </div> <!-- /.meta -->
-                                        </a> <!-- /.product item -->
-                                    </div> <!-- /.col-xs-3 -->
-
-                                    <div class="col-xs-3-del">
-                                        <a href="#" class="product-item">
-                                            <div class="images">
-                                                <img src="assets/images/bagian-produk-recomended/recomended-produk-5.png" alt="Alt" />
-                                            </div> <!-- /.images -->
-
-                                            <div class="meta">
-                                                <div class="category">
-                                                    Safe Core
-                                                </div> <!-- /.category -->
-
-                                                <h2 class="name">
-                                                    Aromathreapy Original 10ML
-                                                </h2> <!-- /.name -->
-
-                                                <div class="rating">
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-                                                    <i class="ion-android-star-outline"></i>
-
-                                                    <span class="count">33</span>
-                                                </div> <!-- /.rating -->
-
-                                                <div class="price">
-                                                    <div class="discount">
-                                                        70%
-                                                    </div> <!-- /.discount -->
-
-                                                    <div class="nominal">
-                                                        <div class="nominal-discount">
-                                                            Rp 16.750.00
-                                                        </div>
-
-                                                        <div class="nominal-normal">
-                                                            Rp 5.025
-                                                        </div>
-                                                    </div> <!-- /.nominal -->
-                                                </div> <!-- /.price -->
-                                            </div> <!-- /.meta -->
-                                        </a> <!-- /.product item -->
-                                    </div> <!-- /.col-xs-3 -->
-                                </div> <!-- /.row -->
-                            </div> <!-- /.section product list -->
-                        </div> <!-- /.recomended -->
-
-
-                        <div role="tabpanel" class="tab-pane" id="hot-deals">...</div>
-                        <div role="tabpanel" class="tab-pane" id="under">...</div>
+                                @empty
+                                    <em>Belum ada..</em>
+                                @endforelse
+                            </div>
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="best">...</div>
                     </div>
                 </div> <!-- /.navtab -->
@@ -490,223 +486,84 @@
 
             <div class="section-product-list">
                 <div class="row-del recomended-slide">
-                    <div class="col-xs-3-del">
-                        <a href="#" class="product-item">
-                            <div class="featured text-center">
-                                <div class="inner">
-                                    <span class="block">Pilihan</span>
-                                    <span class="block">Editor</span>
-                                </div>
-                            </div> <!-- /.featured label -->
-
-                            <div class="images">
-                                <img src="assets/images/bagian-produk-baru/produk-baru-1.png" alt="Alt" />
-                            </div> <!-- /.images -->
-
-                            <div class="meta">
-                                <div class="category">
-                                    Sumber Ayu
-                                </div> <!-- /.category -->
-
-                                <h2 class="name">
-                                    Pembersih kewanitaan daun sirih 90ml
-                                </h2> <!-- /.name -->
-
-                                <div class="rating">
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div> <!-- /.rating -->
-
-                                <div class="price">
-                                    <div class="nominal">
-                                        <div class="nominal-normal">
-                                            Rp 8,250.00
+                    @forelse($product_baru as $k => $v)
+                        <div class="col-xs-3-del">
+                            <a href="{{url($v->slug)}}" class="product-item">
+                                @if($v->featured == 1)
+                                    <div class="featured text-center">
+                                        <div class="inner">
+                                            <span class="block">Pilihan</span>
+                                            <span class="block">Editor</span>
                                         </div>
-                                    </div> <!-- /.nominal -->
-                                </div> <!-- /.price -->
-                            </div> <!-- /.meta -->
-                        </a> <!-- /.product item -->
-                    </div> <!-- /.col-xs-3 -->
+                                    </div> <!-- /.featured label -->
+                                @endif
 
-                    <div class="col-xs-3-del">
-                        <a href="#" class="product-item">
-                            <div class="images">
-                                <img src="assets/images/bagian-produk-baru/produk-baru-2.png" alt="Alt" />
-                            </div> <!-- /.images -->
+                                <div class="images">
+                                    <img src="{{$v->primePhoto}}" alt="Alt" />
+                                </div> <!-- /.images -->
 
-                            <div class="meta">
-                                <div class="countdown">
-                                </div> <!-- /.countdown -->
+                                <div class="meta">
+                                    {{--<div class="countdown">--}}
+                                    {{--<div class="hours">--}}
+                                    {{--00--}}
+                                    {{--</div> <!-- /.hours -->--}}
 
-                                <div class="category">
-                                    ACL
-                                </div> <!-- /.category -->
+                                    {{--<div class="minute">--}}
+                                    {{--00--}}
+                                    {{--</div> <!-- /.minutes -->--}}
 
-                                <h2 class="name">
-                                    ACL hair mask 200gr
-                                </h2> <!-- /.name -->
+                                    {{--<div class="second">--}}
+                                    {{--00--}}
+                                    {{--</div> <!-- /.second -->--}}
+                                    {{--</div> <!-- /.countdown -->--}}
 
-                                <div class="rating">
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div> <!-- /.rating -->
+                                    <div class="category">
+                                        {{title_case($v->brand)}}
+                                    </div> <!-- /.category -->
 
-                                <div class="price">
-                                    <div class="nominal">
-                                        <div class="nominal-normal">
-                                            Rp 23.990
-                                        </div>
-                                    </div> <!-- /.nominal -->
-                                </div> <!-- /.price -->
-                            </div> <!-- /.meta -->
-                        </a> <!-- /.product item -->
-                    </div> <!-- /.col-xs-3 -->
+                                    <h2 class="name">
+                                        {{title_case($v->name)}}
+                                    </h2> <!-- /.name -->
 
-                    <div class="col-xs-3-del">
-                        <a href="#" class="product-item">
-                            <div class="images">
-                                <img src="assets/images/bagian-produk-baru/produk-baru-3.png" alt="Alt" />
-                            </div> <!-- /.images -->
+                                    <div class="rating">
+                                        @for($i = 1; $i<=5;$i++)
+                                            @if($v->rate >= $i)
+                                                <i class="ion-android-star"></i>
+                                            @else
+                                                <i class="ion-android-star-outline"></i>
+                                            @endif
+                                        @endfor
 
-                            <div class="meta">
-                                <div class="category">
-                                    BioAqua
-                                </div> <!-- /.category -->
+                                        <span class="count">{{$v->rating->count()}}</span>
+                                    </div> <!-- /.rating -->
 
-                                <h2 class="name">
-                                    Blueberry mask facial sheet masker wajah
-                                </h2> <!-- /.name -->
+                                    <div class="price">
+                                        @if($v->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->variant->first()->sale_price_end)))
+                                            <div class="discount">
+                                                {{number_format($v->variant->first()->discount, 0, '.', '.')}}%
+                                            </div> <!-- /.discount -->
+                                        @endif
 
-                                <div class="rating">
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div> <!-- /.rating -->
+                                        <div class="nominal">
+                                            {{--//DISCOUNT--}}
+                                            @if($v->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->variant->first()->sale_price_end)))
+                                                <div class="nominal-discount">
+                                                    Rp {{number_format($v->variant->first()->sale_price, 0, ',', '.')}}
+                                                </div>
+                                            @endif
 
-                                <div class="price">
-                                    <div class="nominal">
-                                        <div class="nominal-normal">
-                                            Rp 3,900.00
-                                        </div>
-                                    </div> <!-- /.nominal -->
-                                </div> <!-- /.price -->
-                            </div> <!-- /.meta -->
-                        </a> <!-- /.product item -->
-                    </div> <!-- /.col-xs-3 -->
+                                            <div class="nominal-normal">
+                                                Rp {{number_format($v->variant->first()->price, 0, ',', '.')}}
+                                            </div>
+                                        </div> <!-- /.nominal -->
+                                    </div> <!-- /.price -->
+                                </div> <!-- /.meta -->
+                            </a> <!-- /.product item -->
+                        </div> <!-- /.col-xs-3 -->
 
-                    <div class="col-xs-3-del">
-                        <a href="#" class="product-item">
-                            <div class="images">
-                                <img src="assets/images/bagian-produk-baru/produk-baru-4.png" alt="Alt" />
-                            </div> <!-- /.images -->
-
-                            <div class="meta">
-                                <div class="countdown">
-                                    <div class="hours">
-                                        00
-                                    </div> <!-- /.hours -->
-
-                                    <div class="minute">
-                                        00
-                                    </div> <!-- /.minutes -->
-
-                                    <div class="second">
-                                        00
-                                    </div> <!-- /.second -->
-                                </div> <!-- /.countdown -->
-
-                                <div class="category">
-                                    BioAqua
-                                </div> <!-- /.category -->
-
-                                <h2 class="name">
-                                    Masker carchoal anti komedo actived carbon mask
-                                </h2> <!-- /.name -->
-
-                                <div class="rating">
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div> <!-- /.rating -->
-
-                                <div class="price">
-                                    <div class="nominal">
-                                        <div class="nominal-normal">
-                                            Rp 17,500.00
-                                        </div>
-                                    </div> <!-- /.nominal -->
-                                </div> <!-- /.price -->
-                            </div> <!-- /.meta -->
-                        </a> <!-- /.product item -->
-                    </div> <!-- /.col-xs-3 -->
-
-                    <div class="col-xs-3-del">
-                        <a href="#" class="product-item">
-                            <div class="images">
-                                <img src="assets/images/bagian-produk-baru/produk-baru-5.png" alt="Alt" />
-                            </div> <!-- /.images -->
-
-                            <div class="meta">
-                                <div class="countdown">
-                                    <div class="hours">
-                                        00
-                                    </div> <!-- /.hours -->
-
-                                    <div class="minute">
-                                        00
-                                    </div> <!-- /.minutes -->
-
-                                    <div class="second">
-                                        00
-                                    </div> <!-- /.second -->
-                                </div> <!-- /.countdown -->
-
-                                <div class="category">
-                                    Cream Pot
-                                </div> <!-- /.category -->
-
-                                <h2 class="name">
-                                    Cream pot mushroom jar 30gr
-                                </h2> <!-- /.name -->
-
-                                <div class="rating">
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-                                    <i class="ion-android-star"></i>
-
-                                    <span class="count">26</span>
-                                </div> <!-- /.rating -->
-
-                                <div class="price">
-                                    <div class="discount">
-                                        10%
-                                    </div> <!-- /.discount -->
-
-                                    <div class="nominal">
-                                        <div class="nominal-discount">
-                                            Rp 4,500.00
-                                        </div>
-
-                                        <div class="nominal-normal">
-                                            Rp 4.050
-                                        </div>
-                                    </div> <!-- /.nominal -->
-                                </div> <!-- /.price -->
-                            </div> <!-- /.meta -->
-                        </a> <!-- /.product item -->
-                    </div> <!-- /.col-xs-3 -->
+                    @empty
+                        <em>Belum ada product baru</em>
+                    @endforelse
                 </div> <!-- /.row -->
             </div> <!-- /.section product list -->
 
@@ -754,7 +611,7 @@
                                     <div class="section-blog-text">
                                         <h2 class="section-blog-title text-uppercase">Lorem Ipsum</h2>
 
-                                        <p>Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. If you need more fine-grain control, choose the Expert option. Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. <span class="readmore">Selanjutnya <i class="icon ion-ios-arrow-right"></i></p>
+                                        <p>Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. If you need more fine-grain control, choose the Expert option. Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. <span class="readmore">Selanjutnya <i class="icon ion-ios-arrow-right"></i></span></p>
                                     </div> <!-- /.text -->
                                 </div> <!-- /.col-md-4 -->
                             </div> <!-- /.row -->
@@ -778,7 +635,7 @@
                                     <div class="section-blog-text">
                                         <h2 class="section-blog-title text-uppercase">Lorem Ipsum</h2>
 
-                                        <p>Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. If you need more fine-grain control, choose the Expert option. Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. <span class="readmore">Selanjutnya <i class="icon ion-ios-arrow-right"></i></p>
+                                        <p>Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. If you need more fine-grain control, choose the Expert option. Usage: Click the "Upload Fonts" button, check the agreement and download your fonts. <span class="readmore">Selanjutnya <i class="icon ion-ios-arrow-right"></i></span></p>
                                     </div> <!-- /.text -->
                                 </div> <!-- /.col-md-4 -->
                             </div> <!-- /.row -->

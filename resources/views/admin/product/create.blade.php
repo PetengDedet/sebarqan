@@ -6,6 +6,25 @@
     <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/datepicker/datepicker3.css')}}">
     <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/dropzone/dropzone.css')}}">
+    <style>
+        .dz-preview {
+            width: 20%;
+            float: left;
+        }
+        .dz-success-mark {
+            width: 50%;
+            float: left;
+        }
+        .dz-error-mark {
+            width: 50%;
+            float:left;
+        }
+        .dz-filename {
+            width: 100%;
+            overflow: hidden;
+        }
+
+    </style>
 @endsection
 
 @section('content')
@@ -26,7 +45,7 @@
                 {!! Session::get('msg') !!}
             @endif
 
-            <form method="post" action="" enctype="multipart/form-data" >
+            <form method="post" action="" enctype="multipart/form-data">
                 <div class="col-md-8">
                     <fieldset>
                         <legend>Product Details</legend>
@@ -147,7 +166,14 @@
                         <legend>Gambar</legend>
                         <div class="form-group">
                             <label for="product_picture" class="control-label">Gambar</label>
-                            <input type="file" name="product_picture" id="product_picture" multiple>
+                            <div type="button" class="panel panel-default" >
+                                <div class="panel-body" id="product_picture" style="width: 100%;background: #fdfdfd;border:2px dashed #8eb4cb;min-height: 250px;cursor: pointer;">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="imagePathHolder">
+
                         </div>
                     </fieldset>
                     <br>
@@ -169,7 +195,7 @@
                         </div>
                         <div class="form-group">
                             <label for="product_slug" class="control-label">Slug</label>
-                            <input type="text" name="product_slug" value="{{old('product_slug')}}" class="form-control" id="product_slug">
+                            <input type="text" name="product_slug" value="{{old('product_slug')}}" class="form-control" id="product_slug" required>
                         </div>
                     </fieldset>
                     <div class="form-group">
@@ -198,20 +224,62 @@
            $('#product_sale_period').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' });
             // "myAwesomeDropzone" is the camelized version of the HTML element's ID
 
-            $("#product_picture").dropzone({
-                url: '{{url('admin/product-image-upload')}}',
-                paramName: "file", // The name that will be used to transfer the file
-                maxFilesize: 10 //MB
+            var productPicture = new Dropzone("#product_picture", {
+                url: '{{url('admin/upload-product-picture')}}',
+                paramName: "product_picture", // The name that will be used to transfer the file
+                uploadMultiple: true,
+                acceptedFiles: 'image/*',
+                maxFilesize: 10, //MB,
+                acceptedFiles: ".png,.jpg,.gif,.jpeg",
+                addRemoveLink: true,
+                success: function(file, response){
+                    console.log(response);
+                    if (response.status == 'success') {
+                        $('#imagePathHolder').append('<input type="hidden" name="pictures[]" value="' + response.data + '">');
+                    }else{
+                        alert('Gagal mengupload');
+                    }
+                },
+                init:function(){
+                    var self = this;
+                    // config
+                    self.options.addRemoveLinks = true;
+                    self.options.dictRemoveFile = 'Delete';
+                    //New file added
+                    self.on("addedfile", function (file) {
+                        console.log('new file added ', file);
+                    });
+                    // Send file starts
+                    self.on("sending", function (file) {
+                        console.log('upload started', file);
+                        $('.meter').show();
+                    });
+
+                    // File upload Progress
+                    self.on("totaluploadprogress", function (progress) {
+                        console.log("progress ", progress);
+                        $('.roller').width(progress + '%');
+                    });
+
+                    self.on("queuecomplete", function (progress) {
+                        $('.meter').delay(999).slideUp(999);
+                    });
+
+                    // On removing file
+                    self.on("removedfile", function (file) {
+                        console.log(file);
+                    });
+                }
             });
         });
 
 
         $(function () {
-        // Replace the <textarea id="editor1"> with a CKEditor
-        // instance, using default configuration.
-        CKEDITOR.replace('product_description')
-        //bootstrap WYSIHTML5 - text editor
-        $('.textarea').wysihtml5()
-      })
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('product_description')
+            //bootstrap WYSIHTML5 - text editor
+            $('.textarea').wysihtml5()
+        })
     </script>
 @endsection
