@@ -114,7 +114,7 @@ class ProductController extends Controller
         foreach ($request->pictures as $k => $v) {
             if (Storage::disk('public')->exists('product_photo/' . $v)) {
                 $extension = explode('.', $v);
-                $newName = $product->slug . '_' . str_random(4) . '.' . $extension[count($extension)-1];
+                $newName = str_slug($product->name) . '_' . str_random(4) . '.' . $extension[count($extension)-1];
                 Storage::disk('public')->move('product_photo/' . $v, 'product_photo/' . $newName);
                 ProductPhoto::create([
                     'product_id' => $product->id,

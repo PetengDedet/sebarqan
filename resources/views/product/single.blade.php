@@ -35,7 +35,7 @@
                                     @empty
 
                                     <div class="section-detail-slider-item">
-                                        <img class="img-responsive" src="{{$v->primePhoto}}" alt="{{$product->slug}}" />
+                                        <img class="img-responsive" src="{{$product->primePhoto}}" alt="{{$product->slug}}" />
                                     </div> <!-- /.item -->
                                 @endforelse
                             </div> <!-- /.slider action -->
