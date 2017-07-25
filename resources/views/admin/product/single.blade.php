@@ -15,7 +15,7 @@
                     <dt>SKU</dt>
                     <dd>{{$product->variant->first()->code}}</dd>
                     <dt>Deskripsi</dt>
-                    <dd>{{$product->description}}</dd>
+                    <dd>{!! $product->description !!}</dd>
                 </dl>
             </div>
             <div class="col-md-2">

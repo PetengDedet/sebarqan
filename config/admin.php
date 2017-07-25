@@ -26,4 +26,9 @@ return [
     'new_product_num' => env('NEW_PRODUCT_NUM', 6),
     'best_seller_num' => env('BEST_SELLER_NUM', 3),
     'default_blank_product' => env('DEFAULT_BLANK_PHOTO', 'zonk_box.png'),
+    'app' => [
+        'facebook' => [
+            'id' => env('FACEBOOK_APP_ID', '')
+        ],
+    ],
 ];

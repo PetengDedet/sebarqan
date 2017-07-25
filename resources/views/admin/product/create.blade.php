@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/datepicker/datepicker3.css')}}">
     <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/dropzone/dropzone.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/adminlte/plugins/select2/select2.css')}}">
     <style>
         .dz-preview {
             width: 20%;
@@ -112,10 +113,60 @@
                             <input type="text" name="product_tags" class="form-control" id="product_tags">
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" name="product_featured" value="1"> Featured
-                            &nbsp;&nbsp; <input type="checkbox" name="product_new" value="1"> New
-                            &nbsp;&nbsp; <input type="checkbox" name="peoduct_allow_pre_order" value="1"> Allow Pre-Order
-                            &nbsp;&nbsp; <input type="checkbox" name="peoduct_ignore_stock" value="1"> Ignore Stock
+                            <div class="col-md-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="product_featured" value="1"> Featured
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="product_hot_deal" value="1"> Hot Deal
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="product_new" value="1"> New
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="product_recommended" value="1"> Recommended
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="peoduct_allow_pre_order" value="1"> Allow Pre-Order
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="peoduct_ignore_stock" value="1"> Ignore Stock
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br>
+                    <br>
+
+
+                    <fieldset>
+                        <legend>Personalisasi</legend>
+                        <div class="form-group">
+                            @forelse($personalisasi as $k => $v)
+                                    <div class="col-md-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="product_personalisasi[]" value="{{$v->id}}">{{title_case($v->jenis)}} - {{title_case($v->name)}} &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                @empty
+                                <em>Belum ada personalisasi</em>
+                            @endforelse
                         </div>
                     </fieldset>
                     <br>
@@ -193,11 +244,25 @@
                             <label for="product_meta_keywords" class="control-label">Meta Keywords</label>
                             <input type="text" name="product_meta_keywords" value="{{old('product_meta_keywords')}}" class="form-control" id="product_meta_keywords">
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="product_slug" class="control-label">Slug</label>
                             <input type="text" name="product_slug" value="{{old('product_slug')}}" class="form-control" id="product_slug" required>
+                        </div> --}}
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Related Prduct</legend>
+                        <div class="form-group">
+                            <label for="related_product" class="control-label">Related Product</label>
+                            <select name="related_product[]" class="form-control" id="related_product" multiple="multiple">
+                                @foreach($product as $k => $v)
+                                    <option value="{{$v->id}}">{{$v->brand . ' - ' . $v->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </fieldset>
+                    <br>
+                    <br>
                     <div class="form-group">
                         <input type="checkbox" name="product_published" value="1"> Publish
                     </div>
@@ -217,10 +282,13 @@
     <script src="{{asset('assets/adminlte/plugins/daterangepicker/moment.min.js')}}"></script>
     <script src="{{asset('assets/adminlte/plugins/daterangepicker/daterangepicker.js')}}"></script>
     <script src="{{asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
+    <script src="{{asset('assets/adminlte/plugins/select2/select2.full.js')}}"></script>
     <!-- Bootstrap WYSIHTML5 -->
     <script src="{{asset('assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
     <script>
         $(document).ready(function(){
+           $('#related_product').select2();
+
            $('#product_sale_period').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' });
             // "myAwesomeDropzone" is the camelized version of the HTML element's ID
 

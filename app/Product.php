@@ -26,6 +26,10 @@ class Product extends Model
         return $this->hasMany('\App\ProductRating', 'product_id');
     }
 
+    public function related() {
+        return $this->hasMany('\App\ProductRelation', 'product_id');
+    }
+
     public function getRateAttribute() {
         $rate = 0;
         $productRating = ProductRating::where('product_id', $this->attributes['id'])

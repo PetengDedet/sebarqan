@@ -218,7 +218,8 @@
                             <div class="section-product-list">
 
                                 @forelse($under_price as $k => $v)
-                                    <div class="col-xs-3-del">
+                                    @if($v->product->published == 1)
+                                        <div class="col-xs-3-del">
                                         <a href="{{url($v->product->slug)}}" class="product-item">
                                             @if($v->product->featured == 1)
                                                 <div class="featured text-center">
@@ -277,7 +278,9 @@
                                             </div> <!-- /.meta -->
                                         </a> <!-- /.product item -->
                                     </div> <!-- /.col-xs-3 -->
-
+                                    @else
+                                        <em>Belum ada produk</em>
+                                    @endif
                                 @empty
                                     <em>Belum ada..</em>
                                 @endforelse

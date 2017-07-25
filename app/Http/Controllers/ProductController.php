@@ -4,21 +4,28 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
+
+use Mockery\Exception;
 use Validator;
 use Session;
 use Auth;
 use Hash;
 use Hashids;
 use Image;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
+use DB;
 
 use App\Product;
 use App\Category;
 use App\ProductVariant;
 use App\CategoryProduct;
 use App\ProductPhoto;
+use App\ProductRelation;
+use App\ProductPersonalisasi;
+use App\Personalisasi;
+
 
 class ProductController extends Controller
 {
@@ -29,10 +36,16 @@ class ProductController extends Controller
 
     public function create(Request $request) {
         $category = Category::all();
-        return view('admin.product.create', compact('category'));
+        $product = Product::all();
+        $personalisasi = Personalisasi::orderBy('jenis', 'DESC')->get();
+
+        return view('admin.product.create', compact('category', 'product', 'personalisasi'));
     }
 
     public function store(Request $request) {
+
+        //dd($request);
+
         $validator = Validator::make($request->All(), [
             'product_name' => 'required|max:255',
             'product_price' => 'required|integer|min:0',
@@ -41,7 +54,7 @@ class ProductController extends Controller
             'product_category' => 'required',
             'product_picture.*' => 'required|image',
             'product_description' => 'max:9000',
-            'product_slug' => 'required|max:255'
+            // 'product_slug' => 'required|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -53,78 +66,142 @@ class ProductController extends Controller
             return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Produk dengan url yang sama telah ada.</div>');
         }
 
-        //Product
-        $product = new Product();
-        $product->name = $request->product_name;
-        $product->slug = $request->product_slug;
-        $product->url = str_slug($request->product_name);
-        $product->brand = $request->product_brand;
-        $product->weight = $request->product_weight;
-        $product->width = $request->product_width;
-        $product->length = $request->product_length;
-        $product->height = $request->product_height;
-        $product->tags = $request->product_tags;
-        $product->page_title = $request->product_page_title;
-        $product->meta_description = $request->product_meta_description;
-        $product->meta_keywords = $request->product_meta_keywords;
-        $product->featured = $request->product_featured;
-        $product->new = $request->product_new;
-        $product->allow_pre_order = $request->product_allow_pre_order;
-        $product->ignore_stock = $request->product_ignore_stock;
-        $product->published = $request->product_published;
+        DB::beginTransaction();
 
-        $product->description = $request->product_description;
-        $product->save();
+        //Product
+        try {
+            $product = new Product();
+            $product->name = $request->product_name;
+            $product->slug = str_slug($request->product_name);
+            $product->url = str_slug($request->product_name);
+            $product->brand = $request->product_brand;
+            $product->weight = $request->product_weight;
+            $product->width = $request->product_width;
+            $product->length = $request->product_length;
+            $product->height = $request->product_height;
+            $product->tags = $request->product_tags;
+            $product->page_title = $request->product_page_title;
+            $product->meta_description = $request->product_meta_description;
+            $product->meta_keywords = $request->product_meta_keywords;
+
+            $product->featured = $request->product_featured;
+            $product->new = $request->product_new;
+            $product->hot_deal = $request->hot_deal;
+            $product->allow_pre_order = $request->product_allow_pre_order;
+            $product->ignore_stock = $request->product_ignore_stock;
+            $product->published = $request->product_published;
+
+            $product->description = $request->product_description;
+            $product->save();
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Gagal menyimpan produk</div>');
+        }
 
         //Category
-        if (is_array($request->product_category)) {
-            foreach ($request->product_category as $k => $v) {
-                if($v !== null AND strlen($v) > 0) {
-                    $categoryProduct = new CategoryProduct();
-                    $categoryProduct->product_id = $product->id;
-                    $categoryProduct->category_id = $v;
-                    $categoryProduct->save();
+        try {
+            if (is_array($request->product_category)) {
+                foreach ($request->product_category as $k => $v) {
+                    if ($v !== null AND strlen($v) > 0) {
+                        $categoryProduct = new CategoryProduct();
+                        $categoryProduct->product_id = $product->id;
+                        $categoryProduct->category_id = $v;
+                        $categoryProduct->save();
+                    }
                 }
             }
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Gagal menyimpan kategori produk</div>');
         }
+
         //dd($request);
 
         //Varian
-        $productVarian = new ProductVariant();
-        $productVarian->product_id = $product->id;
-        $productVarian->variant_name = Hashids::encode($product->id);
-        $productVarian->qty = $request->product_stock;
-        $productVarian->price = $request->product_price;
-        $productVarian->sale_price = $request->product_sale_price;
+        try {
+            $productVarian = new ProductVariant();
+            $productVarian->product_id = $product->id;
+            $productVarian->variant_name = Hashids::encode($product->id);
+            $productVarian->qty = $request->product_stock;
+            $productVarian->price = $request->product_price;
+            $productVarian->sale_price = $request->product_sale_price;
 
-        if (null != $request->product_sale_period) {
-            $start = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[0], ' '));
+            if (null != $request->product_sale_period) {
+                $start = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[0], ' '));
 
-            if (strlen($start) > 0) {
-                $productVarian->sale_price_start = $start;
-                $end = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[1], ' '));
-                $productVarian->sale_price_end = $end;
+                if (strlen($start) > 0) {
+                    $productVarian->sale_price_start = $start;
+                    $end = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[1], ' '));
+                    $productVarian->sale_price_end = $end;
+                }
             }
+
+            $productVarian->code = $request->product_sku;
+            $productVarian->save();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Gagal menyimpan produk v</div>');
         }
 
-        $productVarian->code = $request->product_sku;
-        $productVarian->save();
+        DB::commit();
 
         //Foto
-        foreach ($request->pictures as $k => $v) {
-            if (Storage::disk('public')->exists('product_photo/' . $v)) {
-                $extension = explode('.', $v);
-                $newName = str_slug($product->name) . '_' . str_random(4) . '.' . $extension[count($extension)-1];
-                Storage::disk('public')->move('product_photo/' . $v, 'product_photo/' . $newName);
-                ProductPhoto::create([
-                    'product_id' => $product->id,
-                    'path' => $newName,
-                    'thumbnail_path' => $newName,
-                    'alt' => $product->slug,
-                    'is_featured' => ($k == 0) ? 1 : 0,
-                ]);
+        try {
+            if (is_array($request->pictures)) {
+                foreach ($request->pictures as $k => $v) {
+                    if (Storage::disk('public')->exists('product_photo/' . $v)) {
+                        $extension = explode('.', $v);
+                        $newName = str_slug($product->name) . '_' . str_random(4) . '.' . $extension[count($extension) - 1];
+                        Storage::disk('public')->move('product_photo/' . $v, 'product_photo/' . $newName);
+                        ProductPhoto::create([
+                            'product_id' => $product->id,
+                            'path' => $newName,
+                            'thumbnail_path' => $newName,
+                            'alt' => $product->slug,
+                            'is_featured' => ($k == 0) ? 1 : 0,
+                        ]);
+                    }
+                }
+            }
+        }catch (Exception $e) {
+            DB::commit();
+        }
+
+        if (is_array($request->related_product)) {
+            foreach ($request->related_product as $k => $v) {
+                try {
+                    ProductRelation::updateOrCreate(
+                        [
+                            'product_id' => $product->id
+                        ],
+                        [
+                            'relation_id' => $v
+                        ]
+                    );
+                }catch (Exception $e) {
+                    DB::commit();
+                }
             }
         }
+
+        if (is_array($request->product_personalisasi)) {
+            foreach ($request->product_personalisasi as $k => $v) {
+                try {
+                    ProductPersonalisasi::updateOrCreate(
+                        [
+                            'product_id' => $product->id
+                        ],
+                        [
+                            'personalisasi_id' => $v
+                        ]
+                    );
+                }catch (Exception $e) {
+                    DB::commit();
+                }
+            }
+        }
+
 
         return redirect(url('admin/product'))->with('msg', '<div class="alert alert-success">Berhasil menambah product baru</div>');
 
@@ -203,5 +280,55 @@ class ProductController extends Controller
         }
 
         return response()->json($response, 200);
+    }
+
+    public function newProduct(Request $request) {
+        $newProduct = Product::where('published', 1)
+            ->where('new', 1)
+            ->orderBy('updated_at', 'DESC')
+            ->take(12)
+            ->get();
+
+        $title = 'Produk Baru';
+        return view('product.list', compact('newProduct', 'title'));
+    }
+
+    public function publish(Request $request) {
+        $validator = Validator::make($request->All(), [
+            'id' => 'required'
+        ]);
+
+        $product = Product::findOrFail($request->id);
+        if ($product->published == 1) {
+            return redirect()->back()->with('msg', '<div class="alert alert-danger">Product sudah terpublish</div>');
+        }
+
+        $product->published = 1;
+        $product->save();
+
+        return redirect()->back()->with('msg', '<div class="alert alert-success">Berhasil mempublish <strong>' . title_case($product->name) . '</strong></div>');
+
+    }
+
+    public function unpublish(Request $request) {
+        $validator = Validator::make($request->All(), [
+            'id' => 'required'
+        ]);
+
+        $product = Product::findOrFail($request->id);
+        if ($product->published != 1) {
+            return redirect()->back()->with('msg', '<div class="alert alert-danger">Product sedang tidak terpublish</div>');
+        }
+
+        $product->published = null;
+        $product->save();
+
+        return redirect()->back()->with('msg', '<div class="alert alert-success">Berhasil mem-unpublish <strong>' . title_case($product->name) . '</strong></div>');
+    }
+
+    public function addVarian(Request $request) {
+        $product = Product::findOrFail($request->id);
+
+        return view('admin.product.add_varian', compact('product'));
     }
 }

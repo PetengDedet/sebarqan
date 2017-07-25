@@ -11,6 +11,7 @@ use Hash;
 use App\User;
 use App\Product;
 use App\ProductVariant;
+use App\Category;
 
 class HomeController extends Controller
 {
@@ -19,8 +20,11 @@ class HomeController extends Controller
      *
      * @return void
      */
+    protected $category;
+
     public function __construct()
     {
+        $this->category = Category::all();
         //$this->middleware('auth');
     }
 
@@ -34,7 +38,7 @@ class HomeController extends Controller
         //Recommended Product Slider
         //Personalized
         $recommended = Product::where('published', 1)
-            //->where('recommended', 1)
+            ->where('recommended', 1)
             ->orderBy('updated_at', 'DESC')
             ->take(config('admin.recommended_product_num'))
             ->get();
@@ -46,14 +50,13 @@ class HomeController extends Controller
             ->take(config('admin.hot_deal_num'))
             ->get();
 
-        $under_price = ProductVariant::with(['product' => function($q){
-                $q->where('published', 1);
-            }])
+        $under_price = ProductVariant::with('product')
             ->where('price', '<', config('admin.under_price.limit'))
             ->orderBy('updated_at', 'DESC')
             ->distinct('product_id')
             ->take(config('admin.under_price.num'))
             ->get();
+//        dd($under_price);
 
         //Product Baru
         $product_baru = Product::where('published', 1)
@@ -62,7 +65,7 @@ class HomeController extends Controller
             ->take(config('admin.new_product_num'))
             ->get();
 
-        return view('home', compact('recommended', 'hot_deal', 'under_price', 'product_baru'));
+        return view('home', compact('recommended', 'hot_deal', 'under_price', 'product_baru', $this->category));
     }
 
     public function login(Request $request) {

@@ -55,10 +55,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('new-product', ['as' => 'new-product.post', 'uses' => 'ProductController@store']);
     Route::post('upload-product-picture', ['as' => 'upload-product-picture', 'uses' => 'ProductController@uploadProductPict']);
     Route::get('product/detail/{id}', ['as' => 'product.detail', 'uses' => 'ProductController@detail']);
+    Route::post('publish-product', ['as' => 'publish-product', 'uses' => 'ProductController@publish']);
+    Route::post('unpublish-product', ['as' => 'unpublish-product', 'uses' => 'ProductController@unpublish']);
+    Route::get('product/add-varian/{id}', ['as' => 'product.add-varian', 'uses' => 'ProductController@addVarian']);
 
     //Category
     Route::get('category', ['as' => 'category', 'uses' => 'CategoryController@index']);
     Route::post('category', ['as' => 'category.post', 'uses' => 'CategoryController@store']);
+
+    //Members
+    Route::get('members', ['as' => 'members', 'uses' => 'UserController@adminIndex']);
+
+    //Personalisasi
+    Route::get('personalisasi', ['as' => 'personalisasi.index', 'uses' => 'PersonalisasiController@index']);
+    Route::post('personalisasi', ['as' => 'personalisasi.post', 'uses' => 'PersonalisasiController@store']);
+
 });
 //Auth::routes();
 
@@ -67,5 +78,12 @@ Route::get('get-new-product/{take?}/{skip?}', ['as' => 'get-new-product.paginate
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+Route::get('new-product', ['as' => 'new-product', 'uses' => 'ProductController@newProduct']);
+
+//Category
+Route::get('category/{slug}', 'CategoryController@singleCategory')->where('slug', '[A-Za-z0-9\_-]+');
+
+//Product Single
 Route::get('/{slug}', 'ProductController@showPublic')->where('slug', '[A-Za-z0-9\_-]+');
 

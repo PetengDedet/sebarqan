@@ -1,7 +1,38 @@
 @extends('layouts.master')
 
+@section('meta')
+    <meta name="description" content="{{$product->meta_description}}">
+    <meta name="keywords" content="{{$product->meta_keywords}}">
+    <meta name="author" content="{{config('app.name')}}">
+    <meta name="product:price:amount" content="{{$product->variant->first()->sale_price}}" />
+    <meta name="product:price:currency" content="IDR" />
+@endsection
+
+@section('open_graph')
+    <meta property="fb:app_id" content="{{config('admin.app.facebook.id')}}" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:title" content="{{$product->brand . ' ' . $product->name}}" />
+    <meta property="og:url" content="{{url()->current()}}" />
+    <meta property="og:type" content="product" />
+    <meta property="og:description" content="{{$product->meta_description}}" />
+    <meta property="og:image" content="{{$product->primePhoto}}" />
+    <meta property="og:site_name" content="{{config('app.name')}}" />
+@endsection
+
+@section('twitter_card')
+    <meta name="twitter:card" content="product" />
+    <meta name="twitter:title" content="{{$product->brand . ' ' . $product->name}}" />
+    <meta name="twitter:description" content="{{$product->meta_description}}" />
+    <meta name="twitter:url" content="{{url()->current()}}" />
+    <meta name="twitter:image" content="{{$product->primePhoto}}" />
+    <meta name="twitter:label1" content="Harga" />
+    <meta name="twitter:data1" content="Rp{{$product->variant->first()->sale_price}}" />
+    <meta name="twitter:label2" content="Diskon" />
+    <meta name="twitter:data2" content="{{number_format($product->variant->first()->discount, 0, '.', '.')}}%" />
+@endsection
+
 @section('content')
-    <section class="section-breadcrumb">
+<section class="section-breadcrumb">
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
@@ -258,88 +289,67 @@
                         </h3>
 
                         <div class="section-product-list">
-                            <a href="#" class="product-item">
-                                <div class="featured text-center">
-                                    <div class="inner">
-                                        <span class="block">Pilihan</span>
-                                        <span class="block">Editor</span>
-                                    </div>
-                                </div> <!-- /.featured label -->
-
-                                <div class="images">
-                                    <img src="assets/images/bagian-produk-recomended/recomended-produk-1.png" alt="Alt" />
-                                </div> <!-- /.images -->
-
-                                <div class="meta">
-                                    <div class="category">
-                                        Cream Pot
-                                    </div> <!-- /.category -->
-
-                                    <h2 class="name">
-                                        Cream Pot Musron Jar 30GR
-                                    </h2> <!-- /.name -->
-
-                                    <div class="rating">
-                                        <i class="ion-android-star"></i>
-                                        <i class="ion-android-star"></i>
-                                        <i class="ion-android-star-outline"></i>
-                                        <i class="ion-android-star-outline"></i>
-                                        <i class="ion-android-star-outline"></i>
-
-                                        <span class="count">33</span>
-                                    </div> <!-- /.rating -->
-
-                                    <div class="price">
-                                        <div class="discount">
-                                            10%
-                                        </div> <!-- /.discount -->
-
-                                        <div class="nominal">
-                                            <div class="nominal-discount">
-                                                Rp 4.500.00
+                            @forelse($product->related as $k => $v)
+                                <a href="{{url($v->related_product->slug)}}" class="product-item">
+                                    @if($v->related_product->is_featured == 1)
+                                        <div class="featured text-center">
+                                            <div class="inner">
+                                                <span class="block">Pilihan</span>
+                                                <span class="block">Editor</span>
                                             </div>
+                                        </div> <!-- /.featured label -->
+                                    @endif
 
-                                            <div class="nominal-normal">
-                                                Rp 4.050
-                                            </div>
-                                        </div> <!-- /.nominal -->
-                                    </div> <!-- /.price -->
-                                </div> <!-- /.meta -->
-                            </a> <!-- /.product item -->
+                                    <div class="images">
+                                        <img src="{{$v->related_product->primePhoto}}" alt="{{$v->related_product->meta_title}}" />
+                                    </div> <!-- /.images -->
 
-                            <a href="#" class="product-item">
-                                <div class="images">
-                                    <img src="assets/images/bagian-produk-recomended/recomended-produk-3.png" alt="Alt" />
-                                </div> <!-- /.images -->
+                                    <div class="meta">
+                                        <div class="category">
+                                            {{$v->related_product->brand}}
+                                        </div> <!-- /.category -->
 
-                                <div class="meta">
-                                    <div class="category">
-                                        Lanbis
-                                    </div> <!-- /.category -->
+                                        <h2 class="name">
+                                            {{$v->related_product->name}}
+                                        </h2> <!-- /.name -->
 
-                                    <h2 class="name">
-                                        Ultimate Flash Hugging
-                                    </h2> <!-- /.name -->
+                                        <div class="rating">
+                                            @for($i = 1; $i<=5;$i++)
+                                                @if($v->related_product->rate >= $i)
+                                                    <i class="ion-android-star"></i>
+                                                @else
+                                                    <i class="ion-android-star-outline"></i>
+                                                @endif
+                                            @endfor
 
-                                    <div class="rating">
-                                        <i class="ion-android-star"></i>
-                                        <i class="ion-android-star"></i>
-                                        <i class="ion-android-star"></i>
-                                        <i class="ion-android-star"></i>
-                                        <i class="ion-android-star"></i>
+                                            <span class="count">{{$v->related_product->rating->count()}}</span>                                        </div> <!-- /.rating -->
 
-                                        <span class="count">10</span>
-                                    </div> <!-- /.rating -->
+                                        <div class="price">
+                                            @if($v->related_product->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->related_product->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->related_product->variant->first()->sale_price_end)))
+                                                <div class="discount">
+                                                    {{number_format($v->related_product->variant->first()->discount, 0, '.', '.')}}%
+                                                </div> <!-- /.discount -->
+                                            @endif
 
-                                    <div class="price">
-                                        <div class="nominal">
-                                            <div class="nominal-normal">
-                                                Rp 25.900
-                                            </div>
-                                        </div> <!-- /.nominal -->
-                                    </div> <!-- /.price -->
-                                </div> <!-- /.meta -->
-                            </a> <!-- /.product item -->
+                                            <div class="nominal">
+                                                {{--//DISCOUNT--}}
+                                                @if($v->related_product->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->related_product->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->related_product->variant->first()->sale_price_end)))
+                                                    <div class="nominal-discount">
+                                                        Rp {{number_format($v->related_product->variant->first()->sale_price, 0, ',', '.')}}
+                                                    </div>
+                                                @endif
+
+                                                <div class="nominal-normal">
+                                                    Rp {{number_format($v->related_product->variant->first()->price, 0, ',', '.')}}
+                                                </div>
+                                            </div> <!-- /.nominal -->
+                                        </div> <!-- /.price -->
+                                    </div> <!-- /.meta -->
+                                </a> <!-- /.product item -->
+                            @empty
+                                -
+                            @endforelse
+
                         </div> <!-- /.list similar -->
                     </div> <!-- /.similar -->
                 </div> <!-- /.col-sm-4 -->

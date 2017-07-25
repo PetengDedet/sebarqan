@@ -16,6 +16,13 @@ class UserController extends Controller
 {
     //
 
+    public function adminIndex(Request $request)
+    {
+        $member = User::where('level', 'user')->paginate(10);
+
+        return view('admin.user.index', compact('member'));
+    }
+
     public function profile(Request $request)
     {
         $user = Auth::user();
