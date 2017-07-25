@@ -58,6 +58,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('publish-product', ['as' => 'publish-product', 'uses' => 'ProductController@publish']);
     Route::post('unpublish-product', ['as' => 'unpublish-product', 'uses' => 'ProductController@unpublish']);
     Route::get('product/add-varian/{id}', ['as' => 'product.add-varian', 'uses' => 'ProductController@addVarian']);
+    Route::post('product/add-varian/{id}', ['as' => 'product.add-varian.post', 'uses' => 'ProductController@addVarianSave']);
 
     //Category
     Route::get('category', ['as' => 'category', 'uses' => 'CategoryController@index']);
@@ -69,6 +70,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     //Personalisasi
     Route::get('personalisasi', ['as' => 'personalisasi.index', 'uses' => 'PersonalisasiController@index']);
     Route::post('personalisasi', ['as' => 'personalisasi.post', 'uses' => 'PersonalisasiController@store']);
+
+    //Banner
+    Route::get('banner', ['as' => 'banner.index', 'uses' => 'BannerController@index']);
 
 });
 //Auth::routes();

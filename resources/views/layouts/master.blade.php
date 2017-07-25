@@ -377,7 +377,8 @@
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="{{asset('assets/js/jquery/jquery.js')}}"></script>
+{{--<script src="{{asset('assets/js/jquery/jquery.js')}}"></script>--}}
+<script src="{{asset('assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
 
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->

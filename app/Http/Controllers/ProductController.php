@@ -121,10 +121,14 @@ class ProductController extends Controller
         try {
             $productVarian = new ProductVariant();
             $productVarian->product_id = $product->id;
-            $productVarian->variant_name = Hashids::encode($product->id);
+            $productVarian->variant_name = 'Original';
             $productVarian->qty = $request->product_stock;
             $productVarian->price = $request->product_price;
-            $productVarian->sale_price = $request->product_sale_price;
+            $productVariant->weight = $request->product_weight;
+            $productVariant->width = $request->product_width;
+            $productVariant->length = $request->product_length;
+            $productVariant->height = $request->product_height;
+            $productVarian->sale_price = ($request->product_sale_price != null AND $request->product_sale_price > 0) ? $request->product_sale_price : null;
 
             if (null != $request->product_sale_period) {
                 $start = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[0], ' '));
@@ -238,7 +242,7 @@ class ProductController extends Controller
     public function showPublic(Request $request)
     {
         $product = Product::where('slug', $request->slug)->first();
-        if (count($product) == 0) {
+        if (count($product) == 0 OR $product->published != 1) {
             abort(404);
         }
 
@@ -273,6 +277,7 @@ class ProductController extends Controller
 
             foreach ($product_baru as $k => $v) {
                 $response['data'][$k]['rate'] = $v->rate;
+                $response['data'][$k]['rateCount'] = $v->rating->count();
                 $response['data'][$k]['discount'] = number_format($v->discount, 0, '.', '.');
                 $response['data'][$k]['primePhoto'] = $v->primePhoto;
             }
@@ -286,10 +291,11 @@ class ProductController extends Controller
         $newProduct = Product::where('published', 1)
             ->where('new', 1)
             ->orderBy('updated_at', 'DESC')
-            ->take(12)
+            ->take(1)
             ->get();
 
         $title = 'Produk Baru';
+
         return view('product.list', compact('newProduct', 'title'));
     }
 
@@ -330,5 +336,87 @@ class ProductController extends Controller
         $product = Product::findOrFail($request->id);
 
         return view('admin.product.add_varian', compact('product'));
+    }
+    public function addVarianSave(Request $request) {
+        $validator = Validator::make($request->All(), [
+            'id' => 'required|integer',
+            'variant_name' => 'required|max:255',
+            'variant_code' => 'required|max:255|unique:product_variant,code',
+//            'variant_color' => 'sometimes|max:255',
+            'variant_price' => 'required|integer|min:0',
+//            'variant_sale_price' => 'sometimes|integer|min:0',
+            'variant_stock' => 'required|integer|min:0',
+//            'variant_weight' => 'sometimes|min:0',
+//            'variant_height' => 'sometimes|min:0',
+//            'variant_width' => 'sometimes|min:0',
+//            'variant_length' => 'sometimes|min:0'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator->errors());
+        }
+
+        DB::beginTransaction();
+
+        $start = Carbon::now();
+        $end = Carbon::now();
+        if (null != $request->variant_sale_period) {
+            $start = Carbon::parse(trim(explode('-', $request->variant_sale_period, 10)[0], ' '));
+
+            if (strlen($start) > 0) {
+                $productVarian->sale_price_start = $start;
+                $end = Carbon::parse(trim(explode('-', $request->variant_sale_period, 10)[1], ' '));
+                $productVarian->sale_price_end = $end;
+            }
+        }
+
+        //Varian
+        try {
+            $productVarian = ProductVariant::updateOrCreate(
+                ['product_id' => $request->id, 'code' => $request->variant_code],
+                [
+                    'variant_name' => $request->variant_name,
+                    'qty' => $request->variant_stock,
+                    'price' => $request->variant_price,
+                    'weight' => $request->variant_weight,
+                    'width' => $request->variant_width,
+                    'length' => $request->variant_length,
+                    'height' => $request->variant_height,
+                    'sale_price' => ($request->variant_sale_price != null AND $request->variant_sale_price > 0) ? $request->variant_sale_price : null,
+                    'sale_price_start' => $start,
+                    'sale_price_end' => $end
+                ]
+            );
+//            $productVarian->product_id = $request->id;
+//            $productVarian->variant_name = $request->variant_name;
+//            $productVarian->qty = $request->variant_stock;
+//            $productVarian->price = $request->variant_price;
+//            $productVariant->weight = $request->variant_weight;
+//            $productVariant->width = $request->variant_width;
+//            $productVariant->length = $request->variant_length;
+//            $productVariant->height = $request->variant_height;
+//            $productVarian->sale_price = ($request->variant_sale_price != null AND $request->variant_sale_price > 0) ? $request->variant_sale_price : null;
+//
+//            if (null != $request->variant_sale_period) {
+//                $start = Carbon::parse(trim(explode('-', $request->variant_sale_period, 10)[0], ' '));
+//
+//                if (strlen($start) > 0) {
+//                    $productVarian->sale_price_start = $start;
+//                    $end = Carbon::parse(trim(explode('-', $request->variant_sale_period, 10)[1], ' '));
+//                    $productVarian->sale_price_end = $end;
+//                }
+//            }
+//
+//            $productVarian->code = $request->code;
+//            $productVarian->save();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Gagal menyimpan produk Varian baru</div>');
+        }
+
+        DB::commit();
+
+        return redirect()->back()->with('msg', '<div class="alert alert-success">Berhasil menambah variant baru</div>');
     }
 }

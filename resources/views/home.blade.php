@@ -488,7 +488,7 @@
             </h2> <!-- /.section new label -->
 
             <div class="section-product-list">
-                <div class="row-del recomended-slide">
+                <div class="row-del recomended-slide" id="produkBaruContainer">
                     @forelse($product_baru as $k => $v)
                         <div class="col-xs-3-del">
                             <a href="{{url($v->slug)}}" class="product-item">
@@ -570,7 +570,8 @@
                 </div> <!-- /.row -->
             </div> <!-- /.section product list -->
 
-            <a href="#" class="btn btn-orange btn-block text-center">Lihat Lebih Banyak</a>
+            {{--<button class="btn btn-orange btn-block text-center" onclick="loadMoreBaru({{config('admin.new_product_num') . ', ' . $product_baru->count()}})" id="loadMoreBaru">Lihat Lebih Banyak</button>--}}
+            <a href="{{url('category/produk-baru')}}" class="btn btn-orange btn-block text-center">Lihat Lebih Banyak</a>
         </div> <!-- /.container -->
     </section> <!-- /.section new -->
 
@@ -650,4 +651,12 @@
             </div> <!-- /.blog content -->
         </div> <!-- /.container -->
     </section> <!-- /.latest blog -->
+@endsection
+
+@section('js')
+
+    <script type="application/javascript">
+
+
+    </script>
 @endsection

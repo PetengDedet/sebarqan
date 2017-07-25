@@ -23,7 +23,7 @@ return [
         'limit' => env('UNDER_PRICE', 20000),
         'num' => env('UNDER_PRICE_NUM', 3)
     ],
-    'new_product_num' => env('NEW_PRODUCT_NUM', 6),
+    'new_product_num' => env('NEW_PRODUCT_NUM', 2),
     'best_seller_num' => env('BEST_SELLER_NUM', 3),
     'default_blank_product' => env('DEFAULT_BLANK_PHOTO', 'zonk_box.png'),
     'app' => [

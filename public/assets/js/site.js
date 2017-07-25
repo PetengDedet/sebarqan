@@ -1,4 +1,4 @@
-(function($){
+// (function($){
 	$(document).ready( function(){
 		$('#logout').click(function () {
             $(this).parent().find('form').submit();
@@ -109,18 +109,18 @@
 		
 		
 		// filter_harga
-		$("#filter_harga").ionRangeSlider({
-			type: "double",
-			grid: false,
-			min: 0,
-			max: 10000000,
-			from: 0,
-			to: 10000000,
-			prefix: "Rp ",
-			step: 10000,
-			prettify_enabled: true,
-			prettify_separator: "."
-		});
+		// $("#filter_harga").ionRangeSlider({
+		// 	type: "double",
+		// 	grid: false,
+		// 	min: 0,
+		// 	max: 10000000,
+		// 	from: 0,
+		// 	to: 10000000,
+		// 	prefix: "Rp ",
+		// 	step: 10000,
+		// 	prettify_enabled: true,
+		// 	prettify_separator: "."
+		// });
 		
 		
 		$('.product-item').matchHeight({
@@ -271,4 +271,4 @@
 			theme: 'rounded'
 		});
 	});
-})(jQuery);
+// })(jQuery);

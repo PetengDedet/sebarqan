@@ -1,5 +1,10 @@
 @extends('layouts.master')
 
+@section('css')
+    <!-- Select -->
+{{--    <link href="{{asset('assets/plugins/select/css/bootstrap-select.min.css')}}" rel="stylesheet">--}}
+@endsection
+
 @section('meta')
     <meta name="description" content="{{$product->meta_description}}">
     <meta name="keywords" content="{{$product->meta_keywords}}">
@@ -232,7 +237,8 @@
 
                         <div class="section-meta-variant">
                             @if(count($product->variant) > 1)
-                                <select class="selectpicker btn-block" title="Pilih Varian">
+                                {{--<select class="selectpicker btn-block" title="Pilih Varian">--}}
+                                <select class="form-control btn-block" title="Pilih Varian">
                                     @foreach($product->variant as $k => $v)
                                         <option value="{{$v->id}}">{{title_case($v->variant_name)}}</option>
                                     @endforeach

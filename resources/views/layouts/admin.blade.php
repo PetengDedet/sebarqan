@@ -270,7 +270,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{url('admin/banner')}}">
                         <i class="fa fa-map-signs"></i>
                         <span>Banner</span>
                     </a>
