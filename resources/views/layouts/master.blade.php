@@ -110,8 +110,21 @@
                                     </li>
                                 @endif
 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle navbar-cart" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon ion-android-cart"></i><span class="hidden-xs"> Belanjaan saya </span><span class="label label-default">0</span></a>
+                                <li class="">
+                                    <a
+                                        href="{{url('cart')}}"
+                                        {{--class="dropdown-toggle navbar-cart"--}}
+                                        {{--data-toggle="dropdown"--}}
+                                        {{--role="button"--}}
+                                        {{--aria-haspopup="true"--}}
+                                        {{--aria-expanded="false"--}}
+                                    >
+                                        <i class="icon ion-android-cart"></i>
+                                        <span class="hidden-xs"> Belanjaan saya </span>
+                                        <span class="label label-default" id="isiKeranjang">
+                                            {{ Cart::getTotalQuantity()}}
+                                        </span>
+                                    </a>
                                 </li>
                             </ul>
                         </div> <!-- /.navbar menu -->
@@ -380,7 +393,6 @@
 {{--<script src="{{asset('assets/js/jquery/jquery.js')}}"></script>--}}
 <script src="{{asset('assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
 
-
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 
@@ -403,6 +415,5 @@
 <script src="{{asset('assets/js/site.js')}}"></script>
 
 @yield('js')
-
 </body>
 </html>

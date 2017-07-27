@@ -240,10 +240,19 @@
                                 {{--<select class="selectpicker btn-block" title="Pilih Varian">--}}
                                 <select class="form-control btn-block" title="Pilih Varian">
                                     @foreach($product->variant as $k => $v)
-                                        <option value="{{$v->id}}">{{title_case($v->variant_name)}}</option>
+                                        <option
+                                            value="{{$v->id}}"
+                                            data-stock="{{$v->qty}}"
+                                            data-price="{{$v->price}}"
+                                            data-discount="{{number_format($v->discount, 0, '.', '.')}}"
+                                        >
+                                            {{title_case($v->variant_name)}}
+                                        </option>
                                     @endforeach
                                 </select>
                             @endif
+                                <input type="hidden" name="varaint_id" value="{{$product->variant->first()->id}}" id="variant_id">
+                                <input type="hidden" name="stock" value="{{$product->variant->first()->qty}}" id="stock">
                         </div> <!-- /.variant -->
 
                         <div class="section-meta-addcart">
@@ -260,21 +269,32 @@
                             <div class="section-meta-addcart-content">
                                 <div class="list-inline spinner position-relative">
                                     <li>
-                                        <button type="button" class="btn btn-default no-border no-shadow btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                        <button type="button" class="btn btn-default no-border no-shadow btn-number" disabled="disabled" id="decrement" onclick="decrement()" data-type="minus" data-field="quant[1]">
                                             <i class="icon ion-minus-round"></i>
                                         </button>
                                     </li>
 
-                                    <li><input type="text" name="quant[1]" class="form-control text-center no-border no-shadow position-relative input-number" value="1" min="1" max="9999999999999999999"></li>
+                                    <li>
+                                        <input
+                                            type="text"
+                                            name="quantity"
+                                            class="form-control text-center no-border no-shadow position-relative input-number"
+                                            value="1"
+                                            min="1"
+                                            max="{{$product->variant->first()->qty}}"
+                                            id="quantity"
+                                            autocomplete="off"
+                                        >
+                                    </li>
 
                                     <li>
-                                        <button type="button" class="btn btn-default no-border no-shadow btn-number" data-type="plus" data-field="quant[1]">
+                                        <button type="button" class="btn btn-default no-border no-shadow btn-number" data-type="plus" id="increment" onclick="increment()" data-field="quant[1]">
                                             <i class="icon ion-plus-round"></i>
                                         </button>
                                     </li>
                                 </div> <!-- /.amount -->
 
-                                <a href="#addcart" class="btn btn-block btn-orange text-uppercase">
+                                <a href="#" class="btn btn-block btn-orange text-uppercase" id="addToCart">
                                     Masukkan Ke Keranjang
                                 </a>
 
@@ -364,4 +384,93 @@
     </section> <!-- /.detail -->
 </main> <!-- /.main -->
 
+@endsection
+
+
+@section('js')
+    <script type="application/javascript">
+        function increment() {
+            var max = parseInt($('#stock').val());
+            var displayed = parseInt($('#quantity').val());
+
+            $('#decrement').prop('disabled', false);
+
+            if(displayed < max) {
+                displayed++;
+                $('#quantity').val(displayed);
+            }else if(displayed == (max - 1)){
+                displayed++;
+                $('#quantity').val(displayed);
+                $('#increment').prop('disabled', true);
+            }else{
+                $('#increment').prop('disabled', true);
+            }
+
+            if(displayed == 1) {
+                $('#decrement').prop('disabled', true);
+            }
+
+            return false;
+        }
+
+        function decrement() {
+            var displayed = parseInt($('#quantity').val());
+
+            $('#increment').prop('disabled', false);
+
+            if(displayed > 1) {
+                displayed--;
+                $('#quantity').val(displayed);
+            }else if(displayed == 2){
+                displayed--;
+                $('#quantity').val(displayed);
+                $('#decrement').prop('disabled', true);
+            }
+
+            if(displayed == 1) {
+                $('#decrement').prop('disabled', true);
+            }
+
+            return false;
+        }
+
+        $(document).ready(function(){
+            $('#addToCart').on('click', function(e){
+                e.preventDefault();
+
+                var variant_id = $('#variant_id').val();
+                var qty = parseInt($('#quantity').val());
+
+                $.ajax({
+                    url: '{{url('increment-isi-keranjang')}}',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: 'variant_id=' + variant_id + '&qty=' + qty,
+                    beforeSend: function() {
+                        $('#quantity').prop('disabled', true);
+                        $('#addToCart').prop('disabled', true).html('<i class="fa fa-cog fa-spin"></i> Mengirim...')
+                    },
+                    success: function(response) {
+                        if(response.status) {
+                            $('#isiKeranjang').text(
+                                //response.data.quantity
+                                parseInt($('#isiKeranjang').text()) + qty
+                            );
+                        }else{
+                            alert(response.message);
+                        }
+
+                        $('#quantity').prop('disabled', false);
+                        $('#addToCart').prop('disabled', false).html('MASUKKAN KE KERANJANG');
+                    },
+                    error: function(response) {
+                        $('#quantity').prop('disabled', false);
+                        $('#addToCart').prop('disabled', false).html('MASUKKAN KE KERANJANG');
+                    }
+                })
+                return false;
+                alert('Variant_id : ' + variant_id + ' qty: ' + qty);
+            });
+        });
+    </script>
 @endsection

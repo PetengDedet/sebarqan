@@ -74,6 +74,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     //Banner
     Route::get('banner', ['as' => 'banner.index', 'uses' => 'BannerController@index']);
 
+    //Email Template
+    Route::get('email-template', ['as' => 'email-template.index', 'uses' => 'EmailTemplateController@index']);
+
+    //Kupon
+    Route::get('kupon', ['as' => 'kupon.index', 'uses' => 'KuponController@index']);
+    Route::get('kupon/tambah-per-produk', ['as' => 'kupon.tambah-per-produk', 'uses' => 'KuponController@tambahPerProduk']);
+    Route::get('kupon/tambah-per-paket', ['as' => 'kupon.tambah-per-paket', 'uses' => 'KuponController@tambahPerPaket']);
+    Route::get('kupon/tambah-per-kategori', ['as' => 'kupon.tambah-per-kategori', 'uses' => 'KuponController@tambahPerKategori']);
+    Route::get('kupon/tambah-per-user', ['as' => 'kupon.tambah-per-user', 'uses' => 'KuponController@tambahPerUser']);
+    Route::get('kupon/tambah-ongkir', ['as' => 'kupon.tambah-ongkir', 'uses' => 'KuponController@tambahOngkir']);
+    //KuponPost
+    Route::post('kupon/tambah-per-produk', ['as' => 'kupon.tambah-per-produk.post', 'uses' => 'KuponController@simpanPerProduk']);
+
 });
 //Auth::routes();
 
@@ -82,7 +95,13 @@ Route::get('get-new-product/{take?}/{skip?}', ['as' => 'get-new-product.paginate
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+//Order
+Route::post('increment-isi-keranjang', ['as' => 'increment-isi-keranjang.post', 'uses' => 'OrderController@incrementIsiKeranjang']);
 
+//Cart
+Route::get('cart', ['as' => 'cart', 'uses' => 'OrderController@cart']);
+
+//New Produk
 Route::get('new-product', ['as' => 'new-product', 'uses' => 'ProductController@newProduct']);
 
 //Category

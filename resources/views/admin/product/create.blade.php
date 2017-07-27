@@ -277,7 +277,7 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('assets/adminlte/plugins/ckeditor/ckeditor.js')}}"></script>
+{{--    <script src="{{asset('assets/adminlte/plugins/ckeditor/ckeditor.js')}}"></script>--}}
     <script src="{{asset('assets/adminlte/plugins/dropzone/dropzone.js')}}"></script>
     <script src="{{asset('assets/adminlte/plugins/daterangepicker/moment.min.js')}}"></script>
     <script src="{{asset('assets/adminlte/plugins/daterangepicker/daterangepicker.js')}}"></script>
@@ -345,9 +345,9 @@
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor
             // instance, using default configuration.
-            CKEDITOR.replace('product_description')
+//            CKEDITOR.replace('product_description')
             //bootstrap WYSIHTML5 - text editor
-            $('.textarea').wysihtml5()
+            $('textarea').wysihtml5()
         })
     </script>
 @endsection

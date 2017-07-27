@@ -222,7 +222,7 @@
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="header">MAIN NAVIGATION</li>
+                {{--<li class="header">MAIN NAVIGATION</li>--}}
                 <li class="">
                     <a href="{{url('admin/dashboard')}}">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -255,18 +255,11 @@
                         <li><a href="{{url('admin/category')}}">Kategori Product</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
-                    <a href="#">
+                <li class="@if(url()->current() == url('admin/kupon') OR Request::route()->getPrefix() == 'admin/kupon') active @endif">
+                    <a href="{{url('admin/kupon')}}">
                         <i class="fa fa-tags"></i>
                         <span>Kupon</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#">Semua Product</a></li>
-                        <li><a href="#">Tambah Product</a></li>
-                    </ul>
                 </li>
 
                 <li>
@@ -311,6 +304,12 @@
                     <ul class="treeview-menu">
                         <li><a href="{{url('admin/personalisasi')}}">Personalisasi</a></li>
                     </ul>
+                </li>
+                <li>
+                    <a href="{{url('admin/email-template')}}">
+                        <i class="fa fa-envelope"></i>
+                        <span>Template Email</span>
+                    </a>
                 </li>
                 <li>
                     <a href="#">

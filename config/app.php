@@ -182,6 +182,9 @@ return [
 
         Yajra\Datatables\DatatablesServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
+
+        //Cart
+        Darryldecode\Cart\CartServiceProvider::class,
     ],
 
     /*
@@ -235,6 +238,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
     ],
 
 ];

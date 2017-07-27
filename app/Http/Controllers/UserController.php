@@ -11,6 +11,7 @@ use Hash;
 use \Carbon\Carbon;
 
 use App\User;
+use App\Personalisasi;
 
 class UserController extends Controller
 {
@@ -25,8 +26,9 @@ class UserController extends Controller
 
     public function profile(Request $request)
     {
+        $personalisasi = Personalisasi::all();
         $user = Auth::user();
-        return view('user.profile', compact('user'));
+        return view('user.profile', compact('user', 'personalisasi'));
     }
 
     public function updateProfile(Request $request)

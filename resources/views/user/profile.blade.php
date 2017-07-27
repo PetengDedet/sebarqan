@@ -219,16 +219,11 @@
                                                 <label class="block text-uppercase text-center">
                                                     Jenis Kulit
                                                 </label>
-                                                <select class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
-                                                    <option>
-                                                        Pilihan 1
-                                                    </option>
-                                                    <option>
-                                                        Pilihan 2
-                                                    </option>
-                                                    <option>
-                                                        dst...
-                                                    </option>
+                                                <select name="jenis_kulit" class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
+                                                    <option>-</option>
+                                                    @foreach($personalisasi->where('jenis', 'Jenis Kulit') as $k => $v)
+                                                        <option value="{{$v->id}}">{{title_case($v->name)}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <!-- /.form group -->
@@ -237,18 +232,13 @@
                                         <div class="col-xs-12 col-sm-6 col-md-3">
                                             <div class="form-group">
                                                 <label class="block text-uppercase text-center">
-                                                    Warna Kulit
+                                                    Jenis Rambut
                                                 </label>
-                                                <select class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
-                                                    <option>
-                                                        Pilihan 1
-                                                    </option>
-                                                    <option>
-                                                        Pilihan 2
-                                                    </option>
-                                                    <option>
-                                                        dst...
-                                                    </option>
+                                                <select name="jenis_rambut" class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
+                                                    <option>-</option>
+                                                    @foreach($personalisasi->where('jenis', 'Jenis Rambut') as $k => $v)
+                                                        <option value="{{$v->id}}">{{title_case($v->name)}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <!-- /.form group -->
@@ -259,16 +249,11 @@
                                                 <label class="block text-uppercase text-center">
                                                     Kebutuhan Kulit
                                                 </label>
-                                                <select class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
-                                                    <option>
-                                                        Pilihan 1
-                                                    </option>
-                                                    <option>
-                                                        Pilihan 2
-                                                    </option>
-                                                    <option>
-                                                        dst...
-                                                    </option>
+                                                <select name="kebutuhan_kulit" class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
+                                                    <option>-</option>
+                                                    @foreach($personalisasi->where('jenis', 'Kebutuhan Kulit') as $k => $v)
+                                                        <option value="{{$v->id}}">{{title_case($v->name)}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <!-- /.form group -->
@@ -277,18 +262,13 @@
                                         <div class="col-xs-12 col-sm-6 col-md-3">
                                             <div class="form-group">
                                                 <label class="block text-uppercase text-center">
-                                                    Tipe Rambut
+                                                    Kebutuhan Rambut
                                                 </label>
-                                                <select class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
-                                                    <option>
-                                                        Pilihan 1
-                                                    </option>
-                                                    <option>
-                                                        Pilihan 2
-                                                    </option>
-                                                    <option>
-                                                        dst...
-                                                    </option>
+                                                <select name="kebutuhan_rambut" class="selectpicker" data-style="btn-orange-ghost" data-width="100%">
+                                                    <option>-</option>
+                                                    @foreach($personalisasi->where('jenis', 'Kebutuhan Rambut') as $k => $v)
+                                                        <option value="{{$v->id}}">{{title_case($v->name)}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <!-- /.form group -->
