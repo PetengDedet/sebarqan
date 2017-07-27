@@ -177,7 +177,7 @@
 
                                 <div class="col-xs-2 col-sm-1 col-sm-height col-sm-middle">
                                     <div class="trash text-center">
-                                        <a href="#"><i class="icon fa fa-trash"></i></i>
+                                        <a href="#"><i class="icon fa fa-trash"></i></a>
                                     </div>
                                 </div> <!-- /.col-sm-2 -->
                             </div> <!-- /.row -->

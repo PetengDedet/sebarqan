@@ -2,7 +2,8 @@
 
 @section('css')
     <!-- Select -->
-{{--    <link href="{{asset('assets/plugins/select/css/bootstrap-select.min.css')}}" rel="stylesheet">--}}
+    <link href="{{asset('assets/adminlte/plugins/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet">
+{{--    <link href="{{asset('assets/plugins/animate.css')}}" rel="stylesheet">--}}
 @endsection
 
 @section('meta')
@@ -388,6 +389,7 @@
 
 
 @section('js')
+    <script src="{{asset('assets/adminlte/plugins/sweetalert2/sweetalert2.min.js')}}" type="application/javascript"></script>
     <script type="application/javascript">
         function increment() {
             var max = parseInt($('#stock').val());
@@ -456,8 +458,17 @@
                                 //response.data.quantity
                                 parseInt($('#isiKeranjang').text()) + qty
                             );
+                            swal(
+                                'Berhasil',
+                                'Menambahkan item ke dalam keranjang',
+                                'success'
+                            )
                         }else{
-                            alert(response.message);
+                            swal(
+                                'Ups!',
+                                response.message,
+                                'error'
+                            )
                         }
 
                         $('#quantity').prop('disabled', false);

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Validator;
 use Session;
 use Auth;
 use Hash;
+use App\Mail\Register;
 
 use App\User;
 use App\Product;
@@ -128,6 +130,10 @@ class HomeController extends Controller
         $user->level = 'user';
 
         if ($user->save()) {
+
+            //TODO: masukkan dalam job
+            Mail::to($request->email)->send(new Register());
+
             Auth::login($user);
 
             return redirect(url('/'));

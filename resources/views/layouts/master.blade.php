@@ -46,6 +46,7 @@
 
     <!-- iCHeck -->
     <link href="{{asset('assets/plugins/icheck/skins/minimal/orange.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/plugins/animate.css')}}" rel="stylesheet">
 
     <!-- Style site -->
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">

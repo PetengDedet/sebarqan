@@ -31,4 +31,9 @@ return [
             'id' => env('FACEBOOK_APP_ID', '')
         ],
     ],
+    'email' => [
+        'sender' => [
+            'register' => env('EMAIL_SENDER_REGISTER')
+        ],
+    ],
 ];
