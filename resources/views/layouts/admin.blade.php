@@ -223,7 +223,7 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 {{--<li class="header">MAIN NAVIGATION</li>--}}
-                <li class="">
+                <li class="@if(url()->current() == url('admin/dashboard')) active @endif">
                     <a href="{{url('admin/dashboard')}}">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
@@ -241,7 +241,14 @@
                         <li><a href="#">Pending</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                @php
+                    $produkMenu = [
+                        url('admin/product'),
+                        url('admin/new-product'),
+                        url('admin/category')
+                    ];
+                @endphp
+                <li class="treeview @if(in_array(url()->current(), $produkMenu) OR Request::route()->getPrefix() == 'admin/product') active @endif">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Product</span>

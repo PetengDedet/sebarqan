@@ -29,10 +29,6 @@ class RegistrationInit implements ShouldQueue
      */
     public function handle()
     {
-        //
-        //Mail::to($request->user());
-            //->cc($moreUsers)
-            //->bcc($evenMoreUsers)
-            //->queue(new OrderShipped($order));
+        Mail::to($request->email)->send(new Register());
     }
 }

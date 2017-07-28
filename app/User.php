@@ -31,4 +31,28 @@ class User extends Authenticatable
         return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
     }
 
+    public function kebutuhanKulit() {
+        return $this->hasMany('\App\Personalisasi', 'id', 'kebutuhan_kulit');
+    }
+
+    public function kebutuhanRambut() {
+        return $this->hasMany('\App\Personalisasi', 'id', 'kebutuhan_rambut');
+    }
+
+    public function jenisKulit() {
+        return $this->hasMany('\App\Personalisasi', 'id', 'jenis_kulit');
+    }
+
+    public function jenisRambut() {
+        return $this->hasMany('\App\Personalisasi', 'id', 'jenis_rambut');
+    }
+
+    public function whistList() {
+        return $this->hasMany('\App\WhistList', 'user_id');
+    }
+
+    public function address() {
+        return $this->hasMany('\App\Address', 'user_id');
+    }
+
 }

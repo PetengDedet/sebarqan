@@ -263,9 +263,18 @@
                     </fieldset>
                     <br>
                     <br>
-                    <div class="form-group">
-                        <input type="checkbox" name="product_published" value="1"> Publish
-                    </div>
+                    <fieldset>
+                        <legend>Published?</legend>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="product_published" value="1"> Publish
+                                </label>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-flat pull-right">Simpan <i class="fa fa-save"></i> </button>

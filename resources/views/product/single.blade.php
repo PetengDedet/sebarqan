@@ -2,8 +2,9 @@
 
 @section('css')
     <!-- Select -->
+    <script src="{{asset('assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
     <link href="{{asset('assets/adminlte/plugins/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet">
-{{--    <link href="{{asset('assets/plugins/animate.css')}}" rel="stylesheet">--}}
+
 @endsection
 
 @section('meta')
@@ -119,61 +120,66 @@
                             </div>
 
                             <div class="row row-small">
-                                <div class="col-xs-3">
-                                    <div class="section-detail-timer-content text-center">
-                                        <div class="section-detail-timer-nom">
-                                            <div>0</div>
-                                            <div>0</div>
-                                        </div> <!-- /.nom -->
+                                <div id="countDownTimer" class="main">
+                                </div>
 
-                                        <div class="section-detail-timer-label text-uppercase">
-                                            Hari
-                                        </div> <!-- /.label -->
-                                    </div> <!-- /.content -->
-                                </div> <!-- /.col-xs-3 -->
+                                {{--<div class="col-xs-3">--}}
+                                    {{--<div class="section-detail-timer-content text-center">--}}
+                                        {{--<div class="section-detail-timer-nom">--}}
+                                            {{--<div>0</div>--}}
+                                            {{--<div>0</div>--}}
+                                        {{--</div> <!-- /.nom -->--}}
 
-                                <div class="col-xs-3">
-                                    <div class="section-detail-timer-content text-center">
-                                        <div class="section-detail-timer-nom">
-                                            <div>1</div>
-                                            <div>2</div>
-                                        </div> <!-- /.nom -->
+                                        {{--<div class="section-detail-timer-label text-uppercase">--}}
+                                            {{--Hari--}}
+                                        {{--</div> <!-- /.label -->--}}
+                                    {{--</div> <!-- /.content -->--}}
+                                {{--</div> <!-- /.col-xs-3 -->--}}
 
-                                        <div class="section-detail-timer-label text-uppercase">
-                                            Jam
-                                        </div> <!-- /.label -->
-                                    </div> <!-- /.content -->
-                                </div> <!-- /.col-xs-3 -->
+                                {{--<div class="col-xs-3">--}}
+                                    {{--<div class="section-detail-timer-content text-center">--}}
+                                        {{--<div class="section-detail-timer-nom">--}}
+                                            {{--<div>1</div>--}}
+                                            {{--<div>2</div>--}}
+                                        {{--</div> <!-- /.nom -->--}}
 
-                                <div class="col-xs-3">
-                                    <div class="section-detail-timer-content text-center">
-                                        <div class="section-detail-timer-nom">
-                                            <div>3</div>
-                                            <div>4</div>
-                                        </div> <!-- /.nom -->
+                                        {{--<div class="section-detail-timer-label text-uppercase">--}}
+                                            {{--Jam--}}
+                                        {{--</div> <!-- /.label -->--}}
+                                    {{--</div> <!-- /.content -->--}}
+                                {{--</div> <!-- /.col-xs-3 -->--}}
 
-                                        <div class="section-detail-timer-label text-uppercase">
-                                            Menit
-                                        </div> <!-- /.label -->
-                                    </div> <!-- /.content -->
-                                </div> <!-- /.col-xs-3 -->
+                                {{--<div class="col-xs-3">--}}
+                                    {{--<div class="section-detail-timer-content text-center">--}}
+                                        {{--<div class="section-detail-timer-nom">--}}
+                                            {{--<div>3</div>--}}
+                                            {{--<div>4</div>--}}
+                                        {{--</div> <!-- /.nom -->--}}
 
-                                <div class="col-xs-3">
-                                    <div class="section-detail-timer-content text-center">
-                                        <div class="section-detail-timer-nom">
-                                            <div>5</div>
-                                            <div>6</div>
-                                        </div> <!-- /.nom -->
+                                        {{--<div class="section-detail-timer-label text-uppercase">--}}
+                                            {{--Menit--}}
+                                        {{--</div> <!-- /.label -->--}}
+                                    {{--</div> <!-- /.content -->--}}
+                                {{--</div> <!-- /.col-xs-3 -->--}}
 
-                                        <div class="section-detail-timer-label text-uppercase">
-                                            Detik
-                                        </div> <!-- /.label -->
-                                    </div> <!-- /.content -->
-                                </div> <!-- /.col-xs-3 -->
+                                {{--<div class="col-xs-3">--}}
+                                    {{--<div class="section-detail-timer-content text-center">--}}
+                                        {{--<div class="section-detail-timer-nom">--}}
+                                            {{--<div>5</div>--}}
+                                            {{--<div>6</div>--}}
+                                        {{--</div> <!-- /.nom -->--}}
+
+                                        {{--<div class="section-detail-timer-label text-uppercase">--}}
+                                            {{--Detik--}}
+                                        {{--</div> <!-- /.label -->--}}
+                                    {{--</div> <!-- /.content -->--}}
+                                {{--</div> <!-- /.col-xs-3 -->--}}
                             </div> <!-- /.row -->
 
                             <div class="section-detail-timer-left">
-                                Ayo buruan, sisa <b class="text-orange">{{$product->variant->sum('qty')}} item</b> lagi loh!
+                                @if($product->variant->first()->qty > 0)
+                                    Ayo buruan, sisa <b class="text-orange">{{$product->variant->first()->qty}} item</b> lagi loh!
+                                @endif
                             </div>
                         </div> <!-- /.timer -->
 
@@ -219,19 +225,23 @@
 
                         <div class="section-meta-pcs">
                             <ul>
-                                <li>
-                                    <span>6 pcs</span>
-                                    <span>Rp 4.000/pc</span>
-                                </li>
+                                {{--<li>--}}
+                                    {{--<span>6 pcs</span>--}}
+                                    {{--<span>Rp 4.000/pc</span>--}}
+                                {{--</li>--}}
 
-                                <li>
-                                    <span>12 pcs</span>
-                                    <span>Rp 3.900/pc</span>
-                                </li>
+                                {{--<li>--}}
+                                    {{--<span>12 pcs</span>--}}
+                                    {{--<span>Rp 3.900/pc</span>--}}
+                                {{--</li>--}}
 
                                 <li class="section-meta-stock">
                                     <span>Stok</span>
-                                    <span class="text-success"><b>Tersedia</b></span>
+                                    @if($product->variant->first()->qty > 0)
+                                        <span class="text-success"><b>Tersedia</b></span>
+                                        @else
+                                        <span class="text-danger"><b>Habis</b></span>
+                                    @endif
                                 </li>
                             </ul>
                         </div> <!-- /.pcs -->
@@ -295,7 +305,7 @@
                                     </li>
                                 </div> <!-- /.amount -->
 
-                                <a href="#" class="btn btn-block btn-orange text-uppercase" id="addToCart">
+                                <a href="#" class="btn btn-block btn-orange text-uppercase"  @if($product->variant->first()->qty == 0) disabled @else id="addToCart" @endif >
                                     Masukkan Ke Keranjang
                                 </a>
 
@@ -389,6 +399,7 @@
 
 
 @section('js')
+    <script src="/bower_components/jquery.countdown/dist/jquery.countdown.js"></script>
     <script src="{{asset('assets/adminlte/plugins/sweetalert2/sweetalert2.min.js')}}" type="application/javascript"></script>
     <script type="application/javascript">
         function increment() {
@@ -437,6 +448,11 @@
         }
 
         $(document).ready(function(){
+
+            $('#countDownTimer').countdown('{{\Carbon\Carbon::parse($product->variant->first()->sale_price_end)->year}}/{{\Carbon\Carbon::parse($product->variant->first()->sale_price_end)->month}}/10', function(event) {
+                $(this).html(event.strftime('%D days %H:%M:%S'));
+            });
+
             $('#addToCart').on('click', function(e){
                 e.preventDefault();
 

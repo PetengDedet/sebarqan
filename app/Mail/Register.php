@@ -30,6 +30,5 @@ class Register extends Mailable
     {
         return $this->from(config('admin.email.sender.register'))
             ->view('emails.register');
-//        return $this->view('view.name');
     }
 }

@@ -120,6 +120,15 @@ class OrderController extends Controller
         return view('cart', compact('cartCollection'));
     }
 
+    public function checkout(Request $request) {
+        if (Cart::isEmpty()) {
+            return redirect(url('cart'));
+        }
+
+        $cart = Cart::getContent();
+        return view('checkout', compact('cart'));
+    }
+
 //    public function incrementIsiKeranjangOld(Request $request){
 ////        $request->session()->forget('keranjang');
 ////        dd(! is_array($request->session()->get('keranjang')));

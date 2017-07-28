@@ -216,7 +216,7 @@
 
                         <div class="col-xs-12 col-sm-3">
                             <div class="form-group">
-                                <a href="#" class="btn btn-block btn-success text-uppercase">Pembayaran</a>
+                                <a href="{{url('checkout')}}" class="btn btn-block btn-success text-uppercase">Pembayaran</a>
                             </div>
                         </div>
                     </div> <!-- /.row -->

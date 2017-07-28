@@ -36,6 +36,15 @@ Route::group(['middleware' => 'auth'], function (){
     Route::post('logout', ['as' => 'loout', 'uses' => 'HomeController@logout']);
     Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@profile']);
     Route::post('profile', ['as' => 'profile.post', 'uses' => 'UserController@updateProfile']);
+
+    //WhistList
+    Route::get('whist-list', ['as' => 'whist-list', 'uses' => 'UserController@whistList']);
+
+    //Checkout
+    Route::get('checkout', ['as' => 'checkout', 'uses' => 'OrderController@checkout']);
+
+    //Alamat
+    Route::post('alamat', ['as' => 'alamat', 'uses' => 'UserController@updateAlamat']);
 });
 
 /*

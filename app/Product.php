@@ -9,6 +9,27 @@ class Product extends Model
     //
     protected $table = 'product';
     protected $primaryKey = 'id';
+    protected $fillable = [
+        'name',
+        'slug',
+        'url',
+        'brand',
+        'weight',
+        'width',
+        'length',
+        'height',
+        'tags',
+        'page_title',
+        'meta_description',
+        'meta_keywords',
+        'featured',
+        'new',
+        'hot_deal',
+        'allow_pre_order',
+        'ignore_stock',
+        'published',
+        'description'
+    ];
 
     public function category() {
         return $this->hasMany('App\CategoryProduct', 'product_id');

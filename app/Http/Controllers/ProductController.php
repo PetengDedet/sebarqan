@@ -44,7 +44,7 @@ class ProductController extends Controller
 
     public function store(Request $request) {
 
-        //dd($request);
+//        dd($request->weight);
 
         $validator = Validator::make($request->All(), [
             'product_name' => 'required|max:255',
@@ -70,29 +70,29 @@ class ProductController extends Controller
 
         //Product
         try {
-            $product = new Product();
-            $product->name = $request->product_name;
-            $product->slug = str_slug($request->product_name);
-            $product->url = str_slug($request->product_name);
-            $product->brand = $request->product_brand;
-            $product->weight = $request->product_weight;
-            $product->width = $request->product_width;
-            $product->length = $request->product_length;
-            $product->height = $request->product_height;
-            $product->tags = $request->product_tags;
-            $product->page_title = $request->product_page_title;
-            $product->meta_description = $request->product_meta_description;
-            $product->meta_keywords = $request->product_meta_keywords;
+            $product = Product::create([
+                'name' => $request->product_name,
+                'slug' => str_slug($request->product_name),
+                'url' => str_slug($request->product_name),
+                'brand' => $request->product_brand,
+                'weight' => $request->product_weight,
+                'width' => $request->product_width,
+                'length' => $request->product_length,
+                'height' => $request->product_height,
+                'tags' => $request->product_tags,
+                'page_title' => $request->product_page_title,
+                'meta_description' => $request->product_meta_description,
+                'meta_keywords' => $request->product_meta_keywords,
 
-            $product->featured = $request->product_featured;
-            $product->new = $request->product_new;
-            $product->hot_deal = $request->hot_deal;
-            $product->allow_pre_order = $request->product_allow_pre_order;
-            $product->ignore_stock = $request->product_ignore_stock;
-            $product->published = $request->product_published;
+                'featured' => $request->product_featured,
+                'new' => $request->product_new,
+                'hot_deal' => $request->hot_deal,
+                'allow_pre_order' => $request->product_allow_pre_order,
+                'ignore_stock' => $request->product_ignore_stock,
+                'published' => $request->product_published,
 
-            $product->description = $request->product_description;
-            $product->save();
+                'description' => $request->product_description,
+            ]);
         } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Gagal menyimpan produk</div>');
@@ -119,29 +119,33 @@ class ProductController extends Controller
 
         //Varian
         try {
-            $productVarian = new ProductVariant();
-            $productVarian->product_id = $product->id;
-            $productVarian->variant_name = 'Original';
-            $productVarian->qty = $request->product_stock;
-            $productVarian->price = $request->product_price;
-            $productVariant->weight = $request->product_weight;
-            $productVariant->width = $request->product_width;
-            $productVariant->length = $request->product_length;
-            $productVariant->height = $request->product_height;
-            $productVarian->sale_price = ($request->product_sale_price != null AND $request->product_sale_price > 0) ? $request->product_sale_price : null;
-
+            $start = null;
+            $end = null;
             if (null != $request->product_sale_period) {
                 $start = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[0], ' '));
 
                 if (strlen($start) > 0) {
-                    $productVarian->sale_price_start = $start;
                     $end = Carbon::parse(trim(explode('-', $request->product_sale_period, 10)[1], ' '));
-                    $productVarian->sale_price_end = $end;
                 }
             }
 
-            $productVarian->code = $request->product_sku;
-            $productVarian->save();
+            $productVarian = ProductVariant::create([
+                'product_id' => $product->id,
+                'variant_name' => 'Original',
+                'qty' => $request->product_stock,
+                'price' => $request->product_price,
+                'sale_price' => ($request->product_sale_price != null AND $request->product_sale_price > 0) ? $request->product_sale_price : null,
+                'sale_price_start' => $start,
+                'sale_price_end' => $end,
+                'size' => $request->product_size,
+                'color' => $request->product_color,
+                'code' => $request->product_sku,
+                'weight' => $request->product_weight,
+                'height' => $request->product_height,
+                'length' => $request->product_length,
+                'width' => $request->product_width,
+            ]);
+
         } catch (Exception $e) {
             DB::rollback();
 
