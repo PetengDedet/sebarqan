@@ -6,10 +6,10 @@
             </div>
             <!-- /.avatar -->
             <h3 class="section-profile-name text-center">
-                {{$user->fullName()}}
+                {{Auth::user()->full_name}}
             </h3>
             <div class="section-profile-regdate text-center">
-                Bergabung sejak {{\Carbon\Carbon::parse($user->created_at)->format('j  F Y')}}
+                Bergabung sejak {{\Carbon\Carbon::parse(Auth::user()->created_at)->format('j  F Y')}}
             </div>
             <div class="section-profile-meta">
                 <div class="section-profile-meta-item">
@@ -17,7 +17,7 @@
                                     Tanggal lahir
                                 </span>
                     <span>
-                                    {{\Carbon\Carbon::parse($user->dateofbirth)->format('j  F Y')}}
+                                    {{\Carbon\Carbon::parse(Auth::user()->dateofbirth)->format('j  F Y')}}
                                 </span>
                 </div>
                 <div class="section-profile-meta-item">
@@ -25,7 +25,7 @@
                                     Email
                                 </span>
                     <span>
-                                    {{$user->email}}
+                                    {{Auth::user()->email}}
                                 </span>
                 </div>
             </div>
@@ -47,8 +47,8 @@
                     Whislist
                 </a>
             </li>
-            <li>
-                <a href="#">
+            <li class="@if(url()->current() == url('transaction-history') OR Request::route()->getPrefix() == 'transaction-history') active @endif">
+                <a href="{{url('transaction-history')}}">
                     <i class="icon fa fa-shopping-cart">
                     </i>
                     Riwayat Pemesanan

@@ -185,6 +185,9 @@ return [
 
         //Cart
         Darryldecode\Cart\CartServiceProvider::class,
+
+        //Hashid
+        Vinkla\Hashids\HashidsServiceProvider::class,
     ],
 
     /*
@@ -239,6 +242,9 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
+
+        //Hashid
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
     ],
 
 ];

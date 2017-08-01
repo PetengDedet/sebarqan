@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\AdminSetting;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        $adminSettings = AdminSetting::all();
+        view()->share('adminSettings', $adminSettings);
     }
 
     /**

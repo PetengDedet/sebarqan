@@ -3,6 +3,7 @@
 @section('css')
     <!-- Select -->
     {{--    <link href="{{asset('assets/plugins/select/css/bootstrap-select.min.css')}}" rel="stylesheet">--}}
+    <link href="{{asset('assets/adminlte/plugins/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet">
 @endsection
 
 
@@ -216,7 +217,7 @@
 
                         <div class="col-xs-12 col-sm-3">
                             <div class="form-group">
-                                <a href="{{url('checkout')}}" class="btn btn-block btn-success text-uppercase">Pembayaran</a>
+                                <a href="{{url('checkout')}}" class="btn btn-block btn-success text-uppercase" id="checkout">Pembayaran</a>
                             </div>
                         </div>
                     </div> <!-- /.row -->
@@ -224,5 +225,25 @@
             </div> <!-- /.container -->
         </section> <!-- /.cart -->
     </main> <!-- /.main -->
+@endsection
 
+@section('js')
+    <script src="{{asset('assets/adminlte/plugins/sweetalert2/sweetalert2.min.js')}}" type="application/javascript"></script>
+    <script>
+        $('#checkout').on('click', function(e){
+            e.preventDefault();
+            swal({
+                title: 'Checkout?',
+                text: "Anda akan di arahkan ke halaman pembayaran, mengisi alamat tujuan, dan memilih metode pengiriman.",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Isi Alamat Pengiriman'
+            }).then(function () {
+                window.location = '{{url('checkout')}}';
+            })
+        });
+
+    </script>
 @endsection

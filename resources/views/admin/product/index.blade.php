@@ -22,9 +22,9 @@
                         <th>Kategori</th>
                         <th>Harga</th>
                         <th>Stok</th>
-                        <th>
-                            SEO
-                        </th>
+                        {{--<th>--}}
+                            {{--SEO--}}
+                        {{--</th>--}}
 
                         <th>Action</th>
                     </tr>
@@ -84,14 +84,14 @@
                                 <span class="label label-warning"><i class="fa fa-check-square"></i> Ignored Stock</span>&nbsp;
                             @endif
                         </td>
-                        <td>
-                            <strong>Page Title:</strong> {{strlen($v->page_title) > 0 ? $v->page_title : '-'}}
-                            <br>
-                            <strong>Meta Description:</strong> {{strlen($v->meta_description) > 0 ? str_limit($v->meta_description, 50) : '-'}}
-                            <br>
-                            <strong>Meta Keywords:</strong> {{strlen($v->meta_keywords) > 0 ? str_limit($v->meta_keywords,50) : '-'}}
-                            <br>
-                        </td>
+                        {{--<td>--}}
+                            {{--<strong>Page Title:</strong> {{strlen($v->page_title) > 0 ? $v->page_title : '-'}}--}}
+                            {{--<br>--}}
+                            {{--<strong>Meta Description:</strong> {{strlen($v->meta_description) > 0 ? str_limit($v->meta_description, 50) : '-'}}--}}
+                            {{--<br>--}}
+                            {{--<strong>Meta Keywords:</strong> {{strlen($v->meta_keywords) > 0 ? str_limit($v->meta_keywords,50) : '-'}}--}}
+                            {{--<br>--}}
+                        {{--</td>--}}
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

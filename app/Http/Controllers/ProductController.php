@@ -217,8 +217,6 @@ class ProductController extends Controller
 
     public function uploadProductPict(Request $request) {
 
-
-
         foreach ($request->product_picture as $k => $v) {
             $extension = $v->extension();
             $directory = storage_path('app/product_photo');
@@ -391,28 +389,6 @@ class ProductController extends Controller
                     'sale_price_end' => $end
                 ]
             );
-//            $productVarian->product_id = $request->id;
-//            $productVarian->variant_name = $request->variant_name;
-//            $productVarian->qty = $request->variant_stock;
-//            $productVarian->price = $request->variant_price;
-//            $productVariant->weight = $request->variant_weight;
-//            $productVariant->width = $request->variant_width;
-//            $productVariant->length = $request->variant_length;
-//            $productVariant->height = $request->variant_height;
-//            $productVarian->sale_price = ($request->variant_sale_price != null AND $request->variant_sale_price > 0) ? $request->variant_sale_price : null;
-//
-//            if (null != $request->variant_sale_period) {
-//                $start = Carbon::parse(trim(explode('-', $request->variant_sale_period, 10)[0], ' '));
-//
-//                if (strlen($start) > 0) {
-//                    $productVarian->sale_price_start = $start;
-//                    $end = Carbon::parse(trim(explode('-', $request->variant_sale_period, 10)[1], ' '));
-//                    $productVarian->sale_price_end = $end;
-//                }
-//            }
-//
-//            $productVarian->code = $request->code;
-//            $productVarian->save();
         } catch (Exception $e) {
             DB::rollback();
 

@@ -205,7 +205,7 @@
                         <div class="price">
                             @if($product->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($product->variant->first()->sale_price_start), \Carbon\Carbon::parse($product->variant->first()->sale_price_end)))
                                 <div class="discount">
-                                    {{number_format($product->variant->first()->discount, 0, '.', '.')}}%
+                                    {{number_format($product->variant->first()->discount, 1, '.', '.')}}%
                                 </div> <!-- /.discount -->
                             @endif
 
@@ -213,12 +213,12 @@
                                 {{--//DISCOUNT--}}
                                 @if($product->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($product->variant->first()->sale_price_start), \Carbon\Carbon::parse($product->variant->first()->sale_price_end)))
                                     <div class="nominal-discount">
-                                        Rp {{number_format($product->variant->first()->sale_price, 0, ',', '.')}}
+                                        Rp {{number_format($product->variant->first()->price, 0, ',', '.')}}
                                     </div>
                                 @endif
 
                                 <div class="nominal-normal">
-                                    Rp {{number_format($product->variant->first()->price, 0, ',', '.')}}
+                                    Rp {{number_format($product->variant->first()->sale_price, 0, ',', '.')}}
                                 </div>
                             </div> <!-- /.nominal -->
                         </div> <!-- /.price -->
@@ -372,12 +372,12 @@
                                                 {{--//DISCOUNT--}}
                                                 @if($v->related_product->variant->first()->sale_price > 0 AND \Carbon\Carbon::now()->between(\Carbon\Carbon::parse($v->related_product->variant->first()->sale_price_start), \Carbon\Carbon::parse($v->related_product->variant->first()->sale_price_end)))
                                                     <div class="nominal-discount">
-                                                        Rp {{number_format($v->related_product->variant->first()->sale_price, 0, ',', '.')}}
+                                                        Rp {{number_format($v->related_product->variant->first()->price, 0, ',', '.')}}
                                                     </div>
                                                 @endif
 
                                                 <div class="nominal-normal">
-                                                    Rp {{number_format($v->related_product->variant->first()->price, 0, ',', '.')}}
+                                                    Rp {{number_format($v->related_product->variant->first()->sale_price, 0, ',', '.')}}
                                                 </div>
                                             </div> <!-- /.nominal -->
                                         </div> <!-- /.price -->

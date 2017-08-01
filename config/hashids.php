@@ -48,6 +48,11 @@ return [
             'salt' => 'your-salt-string',
             'length' => 'your-length-integer',
         ],
+        'order' => [
+            'salt' => 'Bismillahirrohmanirrohim',
+            'length' => 10,
+            'alphabet' => 'SILAHKN1234567890'
+        ],
 
     ],
 

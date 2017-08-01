@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
+use Mockery\Exception;
 use Session;
 use Validator;
+use Auth;
+use Cart;
+use DB;
+use Hashids;
 
 use App\OrderItem;
 use App\Order;
 use App\ProductVariant;
-use Cart;
+use App\Provinsi;
+use App\Kabupaten;
+use App\Kecamatan;
+use App\Kelurahan;
 
 class OrderController extends Controller
 {
@@ -115,7 +124,6 @@ class OrderController extends Controller
     }
 
     public function cart(Request $request) {
-//        dd(Cart::getSubTotal());
         $cartCollection = Cart::getContent();
         return view('cart', compact('cartCollection'));
     }
@@ -125,8 +133,139 @@ class OrderController extends Controller
             return redirect(url('cart'));
         }
 
+        $provinsi = Provinsi::all();
+
         $cart = Cart::getContent();
-        return view('checkout', compact('cart'));
+        $user = Auth::user();
+        return view('checkout', compact('cart', 'provinsi', 'user'));
+    }
+
+    public function transactionHistory(Request $request) {
+        $user = Auth::user();
+        $orders = Order::where('customer_id', $user->id)
+                ->orderBy('updated_at', 'DESC')
+                ->paginate(2);
+
+        return view('user.transaction-history', compact('user', 'orders'));
+    }
+
+    public function checkoutPost(Request $request) {
+        $validator = Validator::make($request->All(), [
+            'courier' => 'required',
+            'courier_type' => 'required',
+            'payment_bank' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->errors());
+        }
+
+
+        $items = Cart::getContent();
+
+        $provinsi_id = Auth::user()->alamat['provinsi']['id'];
+        $provinsi_nama = Auth::user()->alamat['provinsi']['nama'];
+        $kabupaten_id = Auth::user()->alamat['kabupaten']['id'];
+        $kabupaten_nama = Auth::user()->alamat['kabupaten']['nama'];
+        $kecamatan_id = Auth::user()->alamat['kecamatan']['id'];
+        $kecamatan_nama = Auth::user()->alamat['kecamatan']['nama'];
+        $kelurahan_id = Auth::user()->alamat['kelurahan']['id'];
+        $kelurahan_nama = Auth::user()->alamat['kelurahan']['nama'];
+        $kelurahan_nama = Auth::user()->alamat['kelurahan']['nama'];
+        $alamat = Auth::user()->alamat['alamat'];
+        $kode_pos = Auth::user()->alamat['kode_pos'];
+        $phone = Auth::user()->phone;
+
+        $alamat_pengiriman = Auth::user()->full_name . '<br>' .
+                                $alamat . '<br>' .
+                                $kelurahan_nama . ' - ' . $kecamatan_nama . ' - ' . $kabupaten_nama . '<br>' .
+                                strtoupper($provinsi_nama) . ' ' . $kode_pos . '<br>' .
+                                $phone;
+
+        $alamat_penagihan = $alamat_pengiriman;
+
+        if(null != $request->alamat_pengiriman) {
+            $provinsi_id = $request->provinsi_id;
+            $provinsi_nama = $request->provinsi_nama;
+            $kabupaten_id = $request->provinsi_;
+            $kabupaten_nama = $request->provinsi_id;
+            $kecamatan_id = $request->provinsi_id;
+            $kecamatan_nama = $request->provinsi_id;
+            $kelurahan_id = $request->provinsi_id;
+            $kelurahan_nama = $request->provinsi_id;
+            $kelurahan_nama = $request->provinsi_id;
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $order = Order::create([
+                'customer_id' => Auth::user()->id,
+                'status' => 0,
+                'alamat_pengiriman' => $alamat_pengiriman,
+                'alamat_penagihan' => $alamat_penagihan,
+                'catatan' => $request->catatan,
+                'jasa_pengiriman' => $request->courier,
+                'paket_pengiriman' => $request->courier_type,
+                'metode_pembayaran' => 'transfer',
+                'bank_tujuan' => $request->payment_bank,
+                'kupon_id' => null,
+                'jenis_kupon' => null,
+            ]);
+        }catch (Exception $e) {
+            DB::rollback();
+            return 'Error';
+        }
+
+
+        //Order Item
+        foreach ($items as $k => $v) {
+            $variant = ProductVariant::find($v->id);
+
+            try {
+                $orderItem = OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $variant->product->id,
+                    'variant_id' => $variant->id,
+                    'qty' => $v->quantity
+                ]);
+            }catch (Exception $e) {
+                DB::rollback();
+                return 'Gagal menyimpan item';
+            }
+
+            try {
+                $variant->qty = $variant->qty - $v->quantity;
+                $variant->save();
+            }catch (Exception $e) {
+                DB::rollback();
+                return 'Gagal mengurangi stok';
+            }
+        }
+
+        try {
+            Cart::clear();
+        }catch (Exception $e) {
+            DB::rollback();
+            return 'Error mengosongkan cart';
+        }
+
+        DB::commit();
+
+        return redirect(url('transaction-history'))->with('msg', '<div class="alert alert-success">Transaksi Berhasil. Silahkan Melakukan pembayaran order anda.</div>');
+    }
+
+    public function details(Request $request) {
+        $hashid = Hashids::connection('order')->decode($request->hashid);
+        if (count($hashid) == 0) {
+            abort(404);
+        }
+
+        $order = Order::with('item')->findOrFail($hashid[0]);
+
+        return response()->json($order, 200);
     }
 
 //    public function incrementIsiKeranjangOld(Request $request){
@@ -206,4 +345,6 @@ class OrderController extends Controller
 //
 //        dd($request->session()->get('keranjang'));
 //    }
+
+
 }

@@ -142,7 +142,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{asset('assets/adminlte')}}/dist/img/user2-160x160.jpg" class="user-image"
                                  alt="User Image">
-                            <span class="hidden-xs">{{Auth::user()->fullName()}}</span>
+                            <span class="hidden-xs">{{Auth::user()->full_name}}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -151,7 +151,7 @@
                                      alt="User Image">
 
                                 <p>
-                                    {{Auth::user()->fullName()}} - {{title_case(Auth::user()->level)}}
+                                    {{Auth::user()->full_name}} - {{title_case(Auth::user()->level)}}
                                     <small>Member
                                         since {{\Carbon\Carbon::parse(Auth::user()->created_at)->format('F Y')}}</small>
                                 </p>
@@ -205,7 +205,7 @@
                          alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>{{Auth::user()->fullName()}}</p>
+                    <p>{{Auth::user()->full_name}}</p>
                     {{--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>--}}
                 </div>
             </div>
@@ -228,7 +228,7 @@
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="treeview">
+                <li class="treeview @if(url()->current() == url('admin/orders') OR Request::route()->getPrefix() == 'admin/orders') menu-open active @endif">
                     <a href="#">
                         <i class="fa fa-shopping-bag"></i>
                         <span>Order</span>
@@ -237,8 +237,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#">Order</a></li>
-                        <li><a href="#">Pending</a></li>
+                        <li class="@if(url()->current() == url('admin/orders') OR Request::route()->getPrefix() == 'admin/orders') active @endif"><a href="{{url('admin/orders')}}"><i class="fa fa-circle-o"></i>&nbsp; Order</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>&nbsp; Pending</a></li>
                     </ul>
                 </li>
                 @php
@@ -257,9 +257,15 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{url('admin/product')}}">Semua Product</a></li>
-                        <li><a href="{{url('admin/new-product')}}">Tambah Product</a></li>
-                        <li><a href="{{url('admin/category')}}">Kategori Product</a></li>
+                        <li class="@if(url()->current() == url('admin/product') OR Request::route()->getPrefix() == 'admin/product') active @endif">
+                            <a href="{{url('admin/product')}}"><i class="fa fa-circle-o"></i>&nbsp; Semua Product</a>
+                        </li>
+                        <li class="@if(url()->current() == url('admin/new-product') OR Request::route()->getPrefix() == 'admin/new-product') active @endif">
+                            <a href="{{url('admin/new-product')}}"><i class="fa fa-circle-o"></i>&nbsp; Tambah Product</a>
+                        </li>
+                        <li class="@if(url()->current() == url('admin/category') OR Request::route()->getPrefix() == 'admin/category') active @endif">
+                            <a href="{{url('admin/category')}}"><i class="fa fa-circle-o"></i>&nbsp; Kategori Product</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="@if(url()->current() == url('admin/kupon') OR Request::route()->getPrefix() == 'admin/kupon') active @endif">
@@ -297,7 +303,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{route('members')}}">Semua Member</a></li>
+                        <li><a href="{{route('members')}}"><i class="fa fa-circle-o"></i>&nbsp; Semua Member</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -318,11 +324,17 @@
                         <span>Template Email</span>
                     </a>
                 </li>
-                <li>
+                <li class="treeview">
                     <a href="#">
                         <i class="fa fa-cogs"></i>
                         <span>Pengaturan</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{url('admin/bank')}}"><i class="fa fa-circle-o"></i>&nbsp; Bank</a></li>
+                    </ul>
                 </li>
 
             </ul>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Mockery\Exception;
 use Validator;
 use App\Category;
 
@@ -10,7 +11,7 @@ class CategoryController extends Controller
 {
     //
     public function index(Request $request) {
-        $category = Category::all();
+        $category = Category::orderBy('updated_at', 'DESC')->get();
         return view('admin.category.index', compact('category'));
     }
 
@@ -29,14 +30,18 @@ class CategoryController extends Controller
             return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Kategori <strong><em>"' . $request->category_name . '"</em></strong> sudah ada</div>');
         }
 
-        $category = new Category();
-        $category->name = $request->category_name;
-        $category->slug = str_slug($request->category_name);
-        $category->description = $request->category_description;
-
-        if ($category->save()) {
-            return redirect()->back()->with('msg', '<div class="alert alert-success">Berhasil menyimpan kategori</div>');
+        try {
+            $category = Category::create([
+                'name' => $request->category_name,
+                'slug' => str_slug($request->category_name),
+                'description' => $request->category_description,
+                'parent_id' => $request->category_parent
+            ]);
+        }catch (Exception $e) {
+            return redirect()->back()->withInput()->with('msg', '<div class="alert alert-danger">Gagal menyimpan kategori</div>');
         }
+
+        return redirect()->back()->with('msg', '<div class="alert alert-success">Berhasil menyimpan kategori</div>');
     }
 
     public function singleCategory(Request $request) {

@@ -225,7 +225,7 @@
             <div class="container">
                 <ul class="nav navbar-nav">
                     <li class=""><a href="{{url('category/produk-baru')}}">Produk Baru</a></li>
-                    @forelse(\App\Category::all() as $k => $v)
+                    @forelse(\App\Category::where('parent_id', null)->get() as $k => $v)
                         <li class=""><a href="{{url('category/' . $v->slug)}}">{{strtoupper($v->name)}}</a></li>
                         @empty
 

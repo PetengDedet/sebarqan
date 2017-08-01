@@ -14,7 +14,7 @@
 //Produk
 
 Route::get('test', function (){
-    return str_slug('Invisible Dry Deodorant Spray');
+
 });
 
 Route::get('/', ['as' => 'root', 'uses' => 'HomeController@index']);
@@ -42,6 +42,10 @@ Route::group(['middleware' => 'auth'], function (){
 
     //Checkout
     Route::get('checkout', ['as' => 'checkout', 'uses' => 'OrderController@checkout']);
+    Route::post('checkout', ['as' => 'checkout.post', 'uses' => 'OrderController@checkoutPost']);
+
+    //Transaction History
+    Route::get('transaction-history', ['as' => 'transaction-history', 'uses' => 'OrderController@transactionHistory']);
 
     //Alamat
     Route::post('alamat', ['as' => 'alamat', 'uses' => 'UserController@updateAlamat']);
@@ -56,7 +60,13 @@ Route::group(['middleware' => 'auth'], function (){
 */
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
+    //Dashboard
     Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'AdmController@dashboard']);
+
+    //Order
+    Route::get('orders', ['as' => 'orders', 'uses' => 'AdmController@orders']);
+    Route::get('order/detail/{hashid}', ['as' => 'orders', 'uses' => 'OrderController@details']);
+
 
     //Product
     Route::get('product', ['as' => 'product', 'uses' => 'ProductController@index']);
@@ -96,11 +106,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     //KuponPost
     Route::post('kupon/tambah-per-produk', ['as' => 'kupon.tambah-per-produk.post', 'uses' => 'KuponController@simpanPerProduk']);
 
+
+    //Pengaturan Bank
+    Route::get('bank', ['as' => 'pengaturan.bank', 'uses' => 'AdmController@bank']);
+    Route::post('bank', ['as' => 'pengaturan.bank', 'uses' => 'AdmController@simpanBank']);
 });
 //Auth::routes();
 
 //JSON
 Route::get('get-new-product/{take?}/{skip?}', ['as' => 'get-new-product.paginate', 'uses' => 'ProductController@getNewProduct']);
+Route::get('getAllProvince', ['as' => 'getAllProvince', 'uses' => 'AlamatController@getAllProvince']);
+Route::get('getProvince/{id}', ['as' => 'getProvince', 'uses' => 'AlamatController@getProvince']);
+Route::get('getKab/{id}', ['as' => 'getKab', 'uses' => 'AlamatController@getKab']);
+Route::get('getKec/{id}', ['as' => 'getKec', 'uses' => 'AlamatController@getKec']);
+Route::get('getKel/{id}', ['as' => 'getKel', 'uses' => 'AlamatController@getKel']);
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -118,4 +138,3 @@ Route::get('category/{slug}', 'CategoryController@singleCategory')->where('slug'
 
 //Product Single
 Route::get('/{slug}', 'ProductController@showPublic')->where('slug', '[A-Za-z0-9\_-]+');
-

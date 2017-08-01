@@ -13,7 +13,14 @@ class Address extends Model
         'user_id',
         'alamat',
         'kota',
-        'zip_code'
+        'zip_code',
+        'propinsi_id',
+        'kabupaten_id',
+        'kecamatan_id',
+        'desa_id',
+        'nama_depan',
+        'nama_belakang',
+        'no_hp',
     ];
 
     public function user() {

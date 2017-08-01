@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Address' => $baseDir . '/app/Address.php',
+    'App\\AdminSetting' => $baseDir . '/app/AdminSetting.php',
     'App\\Banner' => $baseDir . '/app/Banner.php',
     'App\\Category' => $baseDir . '/app/Category.php',
     'App\\CategoryProduct' => $baseDir . '/app/CategoryProduct.php',
@@ -13,6 +15,7 @@ return array(
     'App\\EmailTemplate' => $baseDir . '/app/EmailTemplate.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\AdmController' => $baseDir . '/app/Http/Controllers/AdmController.php',
+    'App\\Http\\Controllers\\AlamatController' => $baseDir . '/app/Http/Controllers/AlamatController.php',
     'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
@@ -35,6 +38,9 @@ return array(
     'App\\Http\\Middleware\\TrimStrings' => $baseDir . '/app/Http/Middleware/TrimStrings.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Jobs\\RegistrationInit' => $baseDir . '/app/Jobs/RegistrationInit.php',
+    'App\\Kabupaten' => $baseDir . '/app/Kabupaten.php',
+    'App\\Kecamatan' => $baseDir . '/app/Kecamatan.php',
+    'App\\Kelurahan' => $baseDir . '/app/Kelurahan.php',
     'App\\Kupon' => $baseDir . '/app/Kupon.php',
     'App\\KuponDiscount' => $baseDir . '/app/KuponDiscount.php',
     'App\\KuponPerProduk' => $baseDir . '/app/KuponPerProduk.php',
@@ -53,7 +59,9 @@ return array(
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
+    'App\\Provinsi' => $baseDir . '/app/Provinsi.php',
     'App\\User' => $baseDir . '/app/User.php',
+    'App\\WhistList' => $baseDir . '/app/WhistList.php',
     'Carbon\\Carbon' => $vendorDir . '/nesbot/carbon/src/Carbon/Carbon.php',
     'Carbon\\CarbonInterval' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
     'Carbon\\Exceptions\\InvalidDateException' => $vendorDir . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',

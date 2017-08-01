@@ -24,10 +24,11 @@ class ProductVariant extends Model
 
         $selisih = $this->attributes['price'] - $this->attributes['sale_price'];
 
-        if($selisih > 0){
-            $discount = $selisih / $this->attributes['price'] * 100;
-        }
-
-        return $discount;
+        return ($selisih / $this->attributes['price']) * 100;
+//        if($selisih > 0){
+//            $discount = $selisih / $this->attributes['price'] * 100;
+//        }
+//
+//        return $discount;
     }
 }

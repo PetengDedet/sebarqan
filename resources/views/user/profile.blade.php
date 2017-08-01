@@ -3,6 +3,7 @@
 @section('title', 'Profile | ' . config('app.name'))
 
 @section('content')
+    {{--{{dd($user->alamat)}}--}}
     <section class="section-profile">
         <div class="container">
             <div class="row row-sm-height no-margin">
@@ -261,27 +262,105 @@
                                     <div class="tab-pane @if(! isEmptyOrNullString(session('address'))) active @endif" id="address" role="tabpanel">
                                         <form class="form-horizontal" method="post" action="{{url('alamat')}}">
                                             <div class="form-group">
-                                                <label for="jalan" class="control-label col-md-3">Jalan</label>
+                                                <label for="nama_depan" class="control-label col-md-3">Nama Depan</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" name="jalan" class="form-control" value="{{old('jalan')}}">
+                                                    <input type="text" name="nama_depan" value="{{$user->first_name}}" class="form-control" required>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="nama_belakang" class="control-label col-md-3">Nama Belakang</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" name="nama_belakang" value="{{$user->last_name}}" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="provinsi" class="control-label col-md-3">Provinsi</label>
+                                                <div class="col-md-9">
+                                                    <select name="provinsi" class="form-control" id="provinsi" required>
+                                                        @foreach($provinsi as $k => $v)
+                                                            <option value="{{$v->id_prov}}" @if($user->alamat['provinsi']['id'] == $v->id_prov) selected @endif>{{title_case($v->nama)}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="kota" class="control-label col-md-3">Kota</label>
+                                                <div class="col-md-9">
+                                                    <select name="kabupaten" class="form-control" id="kabupaten" required>
+                                                        @if(strlen($user->alamat['kelurahan']['id']) > 0)
+                                                            @foreach(\App\Kabupaten::where('id_kab', $user->alamat['kabupaten']['id'])->get() as $k => $v)
+                                                                <option value="{{$v->id_kab}}" @if($user->alamat['kabupaten']['id'] == $v->id_kab) selected @endif>{{title_case($v->nama)}}</option>
+                                                            @endforeach
+
+                                                        @else
+
+                                                            @foreach(\App\Kabupaten::where('id_prov', $provinsi->first()->id_prov)->get() as $k => $v)
+                                                                <option value="{{$v->id_kab}}" @if($user->alamat['kabupaten']['id'] == $v->id_kab) selected @endif>{{title_case($v->nama)}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="kota" class="control-label col-md-3">Kecamatan</label>
+                                                <div class="col-md-9">
+                                                    {{--{{dd($provinsi->first()->kabupaten->first()->id_kab)}}--}}
+                                                    <select name="kecamatan" class="form-control" id="kecamatan" required>
+                                                        @if(strlen($user->alamat['kelurahan']['id']) > 0)
+                                                            @foreach(\App\Kecamatan::where('id_kab', $user->alamat['kabupaten']['id'])->get() as $k => $v)
+                                                                <option value="{{$v->id_kec}}" @if($user->alamat['kecamatan']['id'] == $v->id_kec) selected @endif>{{title_case($v->nama)}}</option>
+                                                            @endforeach
+                                                        @else
+
+
+                                                            @foreach(\App\Kecamatan::where('id_kab', $provinsi->first()->kabupaten->first()->id_kab)->get() as $k => $v)
+                                                                <option value="{{$v->id_kec}}" @if($user->alamat['kecamatan']['id'] == $v->id_kec) selected @endif>{{title_case($v->nama)}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="kota" class="control-label col-md-3">Desa/Kelurahan</label>
+                                                <div class="col-md-9">
+                                                    <select name="kelurahan" class="form-control" id="kelurahan" required>
+                                                        @if(strlen($user->alamat['kelurahan']['id']) > 0)
+                                                            @foreach(\App\Kelurahan::where('id_kec', $user->alamat['kecamatan']['id'])->get() as $k => $v)
+                                                                <option value="{{$v->id_kel}}" @if($user->alamat['kelurahan']['id'] == $v->id_kel) selected @endif>{{title_case($v->nama)}}</option>
+                                                            @endforeach
+
+                                                        @else
+
+                                                            @foreach(\App\Kelurahan::where('id_kec', $provinsi->first()->kabupaten->first()->kecamatan->first()->id_kec)->get() as $k => $v)
+                                                                <option value="{{$v->id_kel}}" @if($user->alamat['kelurahan']['id'] == $v->id_kel) selected @endif>{{title_case($v->nama)}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            {{--<div class="form-group">--}}
+                                                {{--<label for="jalan" class="control-label col-md-3">Jalan</label>--}}
+                                                {{--<div class="col-md-9">--}}
+                                                    {{--<input type="text" name="jalan" class="form-control" value="{{old('jalan')}}">--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
                                             <div class="form-group">
                                                 <label for="alamat" class="control-label col-md-3">Alamat</label>
                                                 <div class="col-md-9">
                                                     <textarea name="alamat" class="form-control" value="{{old('alamat')}}" required></textarea>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="kota" class="control-label col-md-3">Kota</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" name="kota" class="form-control" value="{{old('kota')}}">
-                                                </div>
-                                            </div>
+
                                             <div class="form-group">
                                                 <label for="kode_pos" class="control-label col-md-3">Kode Pos</label>
                                                 <div class="col-md-9">
                                                     <input type="text" name="kode_pos" class="form-control" value="{{old('kode_pos')}}" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="no_hp" class="control-label col-md-3">No HP</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" name="no_hp" value="{{$user->phone}}" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -311,5 +390,91 @@
     </section>
     <!-- /.profile -->
 
+@endsection
+
+@section('js')
+    <script>
+        $('#provinsi').on('change', function(){
+            $.ajax({
+                url: '{{url('getProvince')}}/' + $('#provinsi option:selected').val(),
+                type: 'GET',
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#kabupaten, #kecamatan, #kelurahan').prop('disabled', true);
+                },
+                success: function(response) {
+                    if(response.status) {
+                        $('#kabupaten').html('');
+
+                        $.each(response.data.kabupaten, function(k,v){
+                            $('#kabupaten').append('<option value="' + v.id_kab + '">' + v.nama + '</option>');
+                        });
+
+                        $('#kabupaten').prop('disabled', false);
+                    }else{
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        });
+
+        $('#kabupaten').on('change', function(){
+            $.ajax({
+                url: '{{url('getKab')}}/' + $('#kabupaten option:selected').val(),
+                type: 'GET',
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#kecamatan, #kelurahan').prop('disabled', true);
+                },
+                success: function(response) {
+                    if(response.status) {
+                        $('#kecamatan').html('');
+
+                        $.each(response.data.kecamatan, function(k,v){
+                            $('#kecamatan').append('<option value="' + v.id_kec + '">' + v.nama + '</option>');
+                        });
+
+                        $('#kecamatan').prop('disabled', false);
+                    }else{
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        });
+
+        $('#kecamatan').on('change', function(){
+            $.ajax({
+                url: '{{url('getKec')}}/' + $('#kecamatan option:selected').val(),
+                type: 'GET',
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#kelurahan').prop('disabled', true);
+                },
+                success: function(response) {
+                    if(response.status) {
+                        $('#kelurahan').html('');
+
+                        $.each(response.data.kelurahan, function(k,v){
+                            $('#kelurahan').append('<option value="' + v.id_kel + '">' + v.nama + '</option>');
+                        });
+
+                        $('#kelurahan').prop('disabled', false);
+                    }else{
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        });
+
+    </script>
 @endsection
 

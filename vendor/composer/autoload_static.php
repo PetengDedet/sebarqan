@@ -325,6 +325,8 @@ class ComposerStaticInit0ba31feee6d1b5eb26005709bf0a2365
     );
 
     public static $classMap = array (
+        'App\\Address' => __DIR__ . '/../..' . '/app/Address.php',
+        'App\\AdminSetting' => __DIR__ . '/../..' . '/app/AdminSetting.php',
         'App\\Banner' => __DIR__ . '/../..' . '/app/Banner.php',
         'App\\Category' => __DIR__ . '/../..' . '/app/Category.php',
         'App\\CategoryProduct' => __DIR__ . '/../..' . '/app/CategoryProduct.php',
@@ -332,6 +334,7 @@ class ComposerStaticInit0ba31feee6d1b5eb26005709bf0a2365
         'App\\EmailTemplate' => __DIR__ . '/../..' . '/app/EmailTemplate.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\AdmController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdmController.php',
+        'App\\Http\\Controllers\\AlamatController' => __DIR__ . '/../..' . '/app/Http/Controllers/AlamatController.php',
         'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
@@ -354,6 +357,9 @@ class ComposerStaticInit0ba31feee6d1b5eb26005709bf0a2365
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Jobs\\RegistrationInit' => __DIR__ . '/../..' . '/app/Jobs/RegistrationInit.php',
+        'App\\Kabupaten' => __DIR__ . '/../..' . '/app/Kabupaten.php',
+        'App\\Kecamatan' => __DIR__ . '/../..' . '/app/Kecamatan.php',
+        'App\\Kelurahan' => __DIR__ . '/../..' . '/app/Kelurahan.php',
         'App\\Kupon' => __DIR__ . '/../..' . '/app/Kupon.php',
         'App\\KuponDiscount' => __DIR__ . '/../..' . '/app/KuponDiscount.php',
         'App\\KuponPerProduk' => __DIR__ . '/../..' . '/app/KuponPerProduk.php',
@@ -372,7 +378,9 @@ class ComposerStaticInit0ba31feee6d1b5eb26005709bf0a2365
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Provinsi' => __DIR__ . '/../..' . '/app/Provinsi.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
+        'App\\WhistList' => __DIR__ . '/../..' . '/app/WhistList.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',

@@ -14,6 +14,10 @@ use \Carbon\Carbon;
 use App\User;
 use App\Personalisasi;
 use App\Address;
+use App\Provinsi;
+use App\Kabupaten;
+use App\Kecamatan;
+use App\Kelurahan;
 
 class UserController extends Controller
 {
@@ -28,9 +32,11 @@ class UserController extends Controller
 
     public function profile(Request $request)
     {
-        $personalisasi = Personalisasi::all();
         $user = Auth::user();
-        return view('user.profile', compact('user', 'personalisasi'));
+        $personalisasi = Personalisasi::all();
+        $provinsi = Provinsi::all();
+
+        return view('user.profile', compact('user', 'personalisasi', 'provinsi'));
     }
 
     public function updateProfile(Request $request)
